@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="ClassLibrary1/FlightLib.csproj" Id="3b53fcd9-7a68-42ef-a9da-b0628f94a07e" />
+  <Project Path="WinFormsApp4/WinFormsApp4.csproj" />
+</Solution>
