@@ -14,5 +14,10 @@ namespace WinFormsApp4
             Form2 Vols = new Form2();
 
         }
+
+        private void dadesSimulacióToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form3 Dades_Sim = new Form3();
+        }
     }
 }

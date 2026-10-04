@@ -68,6 +68,7 @@ namespace WinFormsApp4
             dadesSimulacióToolStripMenuItem.Name = "dadesSimulacióToolStripMenuItem";
             dadesSimulacióToolStripMenuItem.Size = new Size(224, 26);
             dadesSimulacióToolStripMenuItem.Text = "Dades Simulació";
+            dadesSimulacióToolStripMenuItem.Click += dadesSimulacióToolStripMenuItem_Click;
             // 
             // simulacióToolStripMenuItem
             // 
