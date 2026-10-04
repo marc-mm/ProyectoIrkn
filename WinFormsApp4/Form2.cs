@@ -19,7 +19,7 @@ namespace WinFormsApp4
 
         private Form1 mainForm; // L'IA m'ha ajudat per a fer aquest canvi, ja que abans no estava passant la referència del Form1 a Form2 i per això no podia accedir a les funcions de Form1.
 
-        public Form2(Form1 owner)
+        public Form2(Form1 owner) // Constructor que rep una referència al Form1, l'IA m'ha ajudat.
         {
             InitializeComponent();
             mainForm = owner;
