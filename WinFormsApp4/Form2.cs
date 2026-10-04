@@ -16,19 +16,24 @@ namespace WinFormsApp4
         {
             InitializeComponent();
         }
+
+        private Form1 mainForm; // L'IA m'ha ajudat per a fer aquest canvi, ja que abans no estava passant la referència del Form1 a Form2 i per això no podia accedir a les funcions de Form1.
+
+        public Form2(Form1 owner)
+        {
+            InitializeComponent();
+            mainForm = owner;
+        }
+
         public FlightPlan get_vol(string id, double cpx, double cpy, double fpx, double fpy, double velocidad)
         {
-            id = textBox_ID1.Text;
-            cpx = Convert.ToDouble(textBoxCx1.Text);
-            cpy = Convert.ToDouble(textBoxCy1.Text);
-            fpx = Convert.ToDouble(textBoxFx1.Text);
-            fpy = Convert.ToDouble(textBoxFy1.Text);
-            velocidad = Convert.ToDouble(textBoxV1.Text);
             return new FlightPlan(id, cpx, cpy, fpx, fpy, velocidad);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            mainForm.pon_flight1(get_vol(textBox_ID1.Text, double.Parse(textBoxCx1.Text), double.Parse(textBoxCy1.Text), double.Parse(textBoxFx1.Text), double.Parse(textBoxFy1.Text), double.Parse(textBoxV1.Text)));
+            mainForm.pon_flight2(get_vol(textBox_ID2.Text, double.Parse(textBoxCx2.Text), double.Parse(textBoxCy2.Text), double.Parse(textBoxFx2.Text), double.Parse(textBoxFy2.Text), double.Parse(textBoxV2.Text)));
             Close();
         }
     }
