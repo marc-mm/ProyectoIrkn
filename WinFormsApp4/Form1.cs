@@ -18,6 +18,7 @@ namespace WinFormsApp4
         private void dadesSimulacióToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form3 Dades_Sim = new Form3();
+            Dades_Sim.Show();
         }
     }
 }
