@@ -4,8 +4,15 @@
 	<TargetFramework>net10.0</TargetFramework>
 	<RootNamespace>FlightLib</RootNamespace>
 	<AssemblyName>FlightLib</AssemblyName>
-	<ImplicitUsings>enable</ImplicitUsings>
-	<Nullable>enable</Nullable>
+	<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+
+  <ItemGroup>
+	<Compile Include="FlightPlan.cs" />
+	<Compile Include="FlightPlanLib.cs" />
+	<Compile Include="Position.cs" />
+	<Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
 
 </Project>
