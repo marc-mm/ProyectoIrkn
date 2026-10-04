@@ -17,6 +17,8 @@ namespace WinFormsApp4
 
         private void button1_Click(object sender, EventArgs e)
         {
+            double distanciaSeguridad;
+            double tiempoCiclo;
             try
             {
                 double distancia = Convert.ToDouble(textBoxDistancia.Text);
@@ -28,6 +30,8 @@ namespace WinFormsApp4
                 }
                 else
                 {
+                    distanciaSeguridad = distancia; 
+                    tiempoCiclo = ciclo;
                     MessageBox.Show("Values saved correctly");
                     this.Close();
                 }
