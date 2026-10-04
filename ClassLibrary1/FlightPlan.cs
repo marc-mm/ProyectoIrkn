@@ -1,88 +1,128 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mime;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 
 namespace FlightLib
 {
     public class FlightPlan
     {
-        // Atributos
+        // Atributs
+        string id;                 // identificador del vol
+        Position initialPosition;  // posició inicial (per poder fer Restart)
+        Position currentPosition;  // posició actual
+        Position finalPosition;    // posició final (destí)
+        double velocidad;          // velocitat
 
-        string id; // identificador
-        Position currentPosition; // posicion actual
-        Position finalPosition; // posicion fin
-        double velocidad;
-
-        // Constructures
-        public FlightPlan(string id, double cpx, double cpy, double fpx, double fpy, double velocidad)
+        // Constructor: inicialitza tots els atributs
+        public FlightPlan(string id, double ipx, double ipy, double fpx, double fpy, double velocidad)
         {
             this.id = id;
-            this.currentPosition = new Position(cpx, cpy);
+            this.initialPosition = new Position(ipx, ipy);
+            this.currentPosition = new Position(ipx, ipy); // al principi l'avió és a la posició inicial
             this.finalPosition = new Position(fpx, fpy);
             this.velocidad = velocidad;
         }
 
-        // Metodos
+        // ----- Gets -----
+        public string GetId()
+        { return id; }
+
+        public Position GetInitialPosition()
+        { return initialPosition; }
+
+        public Position GetCurrentPosition()
+        { return currentPosition; }
+
+        public Position GetFinalPosition()
+        { return finalPosition; }
+
+        public double GetVelocidad()
+        { return velocidad; }
+
+        // ----- Sets -----
+        public void SetId(string id)
+        { this.id = id; }
+
+        public void SetInitialPosition(Position p)
+        { this.initialPosition = p; }
+
+        public void SetCurrentPosition(Position p)
+        { this.currentPosition = p; }
+
+        public void SetFinalPosition(Position p)
+        { this.finalPosition = p; }
 
         public void SetVelocidad(double velocidad)
-        // setter del atributo velocidad
         { this.velocidad = velocidad; }
 
-        public void Mover(double tiempo)
-        // Mueve el vuelo a la posición correspondiente a viajar durante el tiempo que se recibe como parámetro
+        // ----- Mètodes -----
+
+        // Mou l'avió el que recorre durant el temps rebut
+        public void Move(double tiempo)
         {
-            //Calculamos la distancia recorrida en el tiempo dado
+            // Si ja ha arribat no el movem
+            if (HasArrived())
+                return;
+
+            // Distància que recorre en aquest temps
             double distancia = tiempo * this.velocidad / 60;
 
-            //Calculamos las razones trigonométricas
-            double hipotenusa = Math.Sqrt((finalPosition.GetX() - currentPosition.GetX()) * (finalPosition.GetX() - currentPosition.GetX()) + (finalPosition.GetY() - currentPosition.GetY()) * (finalPosition.GetY() - currentPosition.GetY()));
+            // Distància que li falta fins al destí, i el sinus i cosinus de la direcció
+            double hipotenusa = currentPosition.Distancia(finalPosition);
             double coseno = (finalPosition.GetX() - currentPosition.GetX()) / hipotenusa;
             double seno = (finalPosition.GetY() - currentPosition.GetY()) / hipotenusa;
 
-            //Caculamos la nueva posición del vuelo
-            double x = currentPosition.GetX() + distancia * coseno;
-            double y = currentPosition.GetY() + distancia * seno;
-
-            Position nextPosition = new Position(x, y);
-
-            if (currentPosition.Distancia(nextPosition) < hipotenusa)
-                currentPosition = nextPosition;
+            // Si amb aquest moviment arribem (o ens passem), el posem directament al destí
+            if (distancia >= hipotenusa)
+            {
+                currentPosition = new Position(finalPosition.GetX(), finalPosition.GetY());
+            }
             else
-                currentPosition = finalPosition;
+            {
+                double x = currentPosition.GetX() + distancia * coseno;
+                double y = currentPosition.GetY() + distancia * seno;
+                currentPosition = new Position(x, y);
+            }
         }
 
-        public bool EstaDestino()
+        // Retorna true si l'avió ha arribat al destí
+        public Boolean HasArrived()
         {
-            bool resultado = false;
-            if (currentPosition == finalPosition)
-                resultado = true;
-
-            return resultado;
+            bool resultat = false;
+            if (currentPosition.Distancia(finalPosition) == 0)
+                resultat = true;
+            return resultat;
         }
 
+        // Torna a posar l'avió a la posició inicial
+        public void Restart()
+        {
+            currentPosition = new Position(initialPosition.GetX(), initialPosition.GetY());
+        }
+
+        // Retorna la distància entre aquest avió i el que rebem
+        public double Distance(FlightPlan plan)
+        {
+            return currentPosition.Distancia(plan.GetCurrentPosition());
+        }
+
+        // Retorna true si els dos avions estan més a prop que la distància de seguretat
         public bool Conflicto(FlightPlan b, double distanciaSeguridad)
         {
             bool conflicto = false;
-
-            if (this.currentPosition.Distancia(b.currentPosition) < distanciaSeguridad)
+            if (Distance(b) < distanciaSeguridad)
                 conflicto = true;
-
             return conflicto;
         }
 
+        // Escriu les dades a la consola (de la versió en consola)
         public void EscribeConsola()
-        // escribe en consola los datos del plan de vuelo
         {
             Console.WriteLine("******************************");
-            Console.WriteLine("Datos del vuelo: ");
+            Console.WriteLine("Dades del vol: ");
             Console.WriteLine("Identificador: {0}", id);
-            Console.WriteLine("Velocidad: {0:f2}", velocidad);
-            Console.WriteLine("Posición actual: ({0:f2} -- {1:f2})", currentPosition.GetX(), currentPosition.GetY());
-            if (this.EstaDestino())
-                Console.WriteLine("Ha llegado al destino");
+            Console.WriteLine("Velocitat: {0:f2}", velocidad);
+            Console.WriteLine("Posició actual: ({0:f2} -- {1:f2})", currentPosition.GetX(), currentPosition.GetY());
+            if (HasArrived())
+                Console.WriteLine("Ha arribat al destí");
             Console.WriteLine("******************************");
         }
     }

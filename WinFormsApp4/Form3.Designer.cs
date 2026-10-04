@@ -1,4 +1,4 @@
-﻿namespace WinFormsApp4
+namespace WinFormsApp4
 {
     partial class Form3
     {
@@ -34,61 +34,62 @@
             textBoxCiclo = new TextBox();
             button1 = new Button();
             SuspendLayout();
-            // 
+            //
             // label1
-            // 
+            //
             label1.AutoSize = true;
-            label1.Location = new Point(72, 90);
+            label1.Location = new Point(30, 33);
             label1.Name = "label1";
-            label1.Size = new Size(256, 32);
+            label1.Size = new Size(128, 15);
             label1.TabIndex = 0;
-            label1.Text = "Distancia de seguridad";
-            // 
+            label1.Text = "Distància de seguretat:";
+            //
             // label2
-            // 
+            //
             label2.AutoSize = true;
-            label2.Location = new Point(482, 90);
+            label2.Location = new Point(30, 73);
             label2.Name = "label2";
-            label2.Size = new Size(184, 32);
+            label2.Size = new Size(90, 15);
             label2.TabIndex = 1;
-            label2.Text = "Tiempo de ciclo";
-            // 
+            label2.Text = "Temps de cicle:";
+            //
             // textBoxDistancia
-            // 
-            textBoxDistancia.Location = new Point(94, 208);
+            //
+            textBoxDistancia.Location = new Point(180, 30);
             textBoxDistancia.Name = "textBoxDistancia";
-            textBoxDistancia.Size = new Size(200, 39);
+            textBoxDistancia.Size = new Size(100, 23);
             textBoxDistancia.TabIndex = 2;
-            // 
+            //
             // textBoxCiclo
-            // 
-            textBoxCiclo.Location = new Point(482, 208);
+            //
+            textBoxCiclo.Location = new Point(180, 70);
             textBoxCiclo.Name = "textBoxCiclo";
-            textBoxCiclo.Size = new Size(200, 39);
+            textBoxCiclo.Size = new Size(100, 23);
             textBoxCiclo.TabIndex = 3;
-            // 
+            //
             // button1
-            // 
-            button1.Location = new Point(313, 311);
+            //
+            button1.Location = new Point(100, 115);
             button1.Name = "button1";
-            button1.Size = new Size(150, 46);
+            button1.Size = new Size(120, 35);
             button1.TabIndex = 4;
             button1.Text = "Acceptar";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
-            // 
+            //
             // Form3
-            // 
-            AutoScaleDimensions = new SizeF(13F, 32F);
+            //
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(320, 170);
             Controls.Add(button1);
             Controls.Add(textBoxCiclo);
             Controls.Add(textBoxDistancia);
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "Form3";
-            Text = "Form3";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Dades de la simulació";
             ResumeLayout(false);
             PerformLayout();
         }

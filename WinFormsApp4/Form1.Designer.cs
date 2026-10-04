@@ -1,6 +1,3 @@
-﻿using System.Xml.Linq;
-using static System.Net.Mime.MediaTypeNames;
-
 namespace WinFormsApp4
 {
     partial class Form1
@@ -32,61 +29,64 @@ namespace WinFormsApp4
         private void InitializeComponent()
         {
             menuStrip1 = new MenuStrip();
-            opcionsToolStripMenuItem = new ToolStripMenuItem();
-            informacióVolsToolStripMenuItem = new ToolStripMenuItem();
-            dadesSimulacióToolStripMenuItem = new ToolStripMenuItem();
-            simulacióToolStripMenuItem = new ToolStripMenuItem();
+            menuVols = new ToolStripMenuItem();
+            menuDades = new ToolStripMenuItem();
+            menuSimulacio = new ToolStripMenuItem();
+            label1 = new Label();
             menuStrip1.SuspendLayout();
             SuspendLayout();
-            // 
+            //
             // menuStrip1
-            // 
+            //
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { opcionsToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { menuVols, menuDades, menuSimulacio });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Padding = new Padding(5, 2, 0, 2);
-            menuStrip1.Size = new Size(586, 24);
+            menuStrip1.Size = new Size(584, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
-            // 
-            // opcionsToolStripMenuItem
-            // 
-            opcionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { informacióVolsToolStripMenuItem, dadesSimulacióToolStripMenuItem, simulacióToolStripMenuItem });
-            opcionsToolStripMenuItem.Name = "opcionsToolStripMenuItem";
-            opcionsToolStripMenuItem.Size = new Size(88, 20);
-            opcionsToolStripMenuItem.Text = "Configuració";
-            // 
-            // informacióVolsToolStripMenuItem
-            // 
-            informacióVolsToolStripMenuItem.Name = "informacióVolsToolStripMenuItem";
-            informacióVolsToolStripMenuItem.Size = new Size(161, 22);
-            informacióVolsToolStripMenuItem.Text = "Informació Vols";
-            informacióVolsToolStripMenuItem.Click += informacióVolsToolStripMenuItem_Click;
-            // 
-            // dadesSimulacióToolStripMenuItem
-            // 
-            dadesSimulacióToolStripMenuItem.Name = "dadesSimulacióToolStripMenuItem";
-            dadesSimulacióToolStripMenuItem.Size = new Size(161, 22);
-            dadesSimulacióToolStripMenuItem.Text = "Dades Simulació";
-            dadesSimulacióToolStripMenuItem.Click += dadesSimulacióToolStripMenuItem_Click;
-            // 
-            // simulacióToolStripMenuItem
-            // 
-            simulacióToolStripMenuItem.Name = "simulacióToolStripMenuItem";
-            simulacióToolStripMenuItem.Size = new Size(161, 22);
-            simulacióToolStripMenuItem.Text = "Simulació";
-            // 
+            //
+            // menuVols
+            //
+            menuVols.Name = "menuVols";
+            menuVols.Size = new Size(100, 20);
+            menuVols.Text = "Dades dels vols";
+            menuVols.Click += menuVols_Click;
+            //
+            // menuDades
+            //
+            menuDades.Name = "menuDades";
+            menuDades.Size = new Size(110, 20);
+            menuDades.Text = "Dades simulació";
+            menuDades.Click += menuDades_Click;
+            //
+            // menuSimulacio
+            //
+            menuSimulacio.Name = "menuSimulacio";
+            menuSimulacio.Size = new Size(70, 20);
+            menuSimulacio.Text = "Simulació";
+            menuSimulacio.Click += menuSimulacio_Click;
+            //
+            // label1
+            //
+            label1.Font = new Font("Segoe UI", 12F);
+            label1.Location = new Point(40, 80);
+            label1.Name = "label1";
+            label1.Size = new Size(500, 120);
+            label1.TabIndex = 1;
+            label1.Text = "1. Dades dels vols: introdueix els dos plans de vol\r\n2. Dades simulació: distància de seguretat i temps de cicle\r\n3. Simulació: obre l'espai aeri";
+            //
             // Form1
-            // 
+            //
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(586, 479);
+            ClientSize = new Size(584, 261);
+            Controls.Add(label1);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
-            Margin = new Padding(3, 2, 3, 2);
             Name = "Form1";
-            Text = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Simulador de vols";
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);
@@ -96,9 +96,9 @@ namespace WinFormsApp4
         #endregion
 
         private MenuStrip menuStrip1;
-        private ToolStripMenuItem opcionsToolStripMenuItem;
-        private ToolStripMenuItem informacióVolsToolStripMenuItem;
-        private ToolStripMenuItem dadesSimulacióToolStripMenuItem;
-        private ToolStripMenuItem simulacióToolStripMenuItem;
+        private ToolStripMenuItem menuVols;
+        private ToolStripMenuItem menuDades;
+        private ToolStripMenuItem menuSimulacio;
+        private Label label1;
     }
 }
