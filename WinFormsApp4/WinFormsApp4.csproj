@@ -12,4 +12,10 @@
     <ProjectReference Include="..\ClassLibrary1\FlightLib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Form4.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

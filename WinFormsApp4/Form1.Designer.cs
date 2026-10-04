@@ -45,7 +45,8 @@ namespace WinFormsApp4
             menuStrip1.Items.AddRange(new ToolStripItem[] { opcionsToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(670, 28);
+            menuStrip1.Padding = new Padding(5, 2, 0, 2);
+            menuStrip1.Size = new Size(586, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -53,36 +54,37 @@ namespace WinFormsApp4
             // 
             opcionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { informacióVolsToolStripMenuItem, dadesSimulacióToolStripMenuItem, simulacióToolStripMenuItem });
             opcionsToolStripMenuItem.Name = "opcionsToolStripMenuItem";
-            opcionsToolStripMenuItem.Size = new Size(108, 24);
+            opcionsToolStripMenuItem.Size = new Size(88, 20);
             opcionsToolStripMenuItem.Text = "Configuració";
             // 
             // informacióVolsToolStripMenuItem
             // 
             informacióVolsToolStripMenuItem.Name = "informacióVolsToolStripMenuItem";
-            informacióVolsToolStripMenuItem.Size = new Size(224, 26);
+            informacióVolsToolStripMenuItem.Size = new Size(161, 22);
             informacióVolsToolStripMenuItem.Text = "Informació Vols";
             informacióVolsToolStripMenuItem.Click += informacióVolsToolStripMenuItem_Click;
             // 
             // dadesSimulacióToolStripMenuItem
             // 
             dadesSimulacióToolStripMenuItem.Name = "dadesSimulacióToolStripMenuItem";
-            dadesSimulacióToolStripMenuItem.Size = new Size(224, 26);
+            dadesSimulacióToolStripMenuItem.Size = new Size(161, 22);
             dadesSimulacióToolStripMenuItem.Text = "Dades Simulació";
             dadesSimulacióToolStripMenuItem.Click += dadesSimulacióToolStripMenuItem_Click;
             // 
             // simulacióToolStripMenuItem
             // 
             simulacióToolStripMenuItem.Name = "simulacióToolStripMenuItem";
-            simulacióToolStripMenuItem.Size = new Size(224, 26);
+            simulacióToolStripMenuItem.Size = new Size(161, 22);
             simulacióToolStripMenuItem.Text = "Simulació";
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(670, 639);
+            ClientSize = new Size(586, 479);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
+            Margin = new Padding(3, 2, 3, 2);
             Name = "Form1";
             Text = "Form1";
             menuStrip1.ResumeLayout(false);

@@ -12,6 +12,9 @@ namespace WinFormsApp4
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new Form1());
+            int ciclos = 100;
+            int tiempociclo = 1;
+
         }
     }
 }
