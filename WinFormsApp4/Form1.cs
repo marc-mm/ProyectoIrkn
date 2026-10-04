@@ -12,6 +12,7 @@ namespace WinFormsApp4
         private void informacióVolsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form2 Vols = new Form2();
+            Vols.Show();
 
         }
 
