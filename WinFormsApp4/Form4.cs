@@ -37,7 +37,7 @@ namespace WinFormsApp4
             tiempoCiclo = c;
         }
 
-        // Quan s'obre el formulari creem els dos avions dins del panel (Fase 3)
+        // Quan s'obre el furmulari creem els dos avions dins del panel 
         private void Form4_Load(object sender, EventArgs e)
         {
             // Avió 1 (blau)
@@ -94,7 +94,7 @@ namespace WinFormsApp4
                 MessageBox.Show("Els dos avions han arribat al destí");
         }
 
-        // Botó "Reiniciar": els avions tornen a la posició inicial
+        // Botó Reiniciar els avions tornen a la posició inicial
         private void button2_Click(object sender, EventArgs e)
         {
             vol1.Restart();
@@ -102,7 +102,7 @@ namespace WinFormsApp4
             ActualitzarPantalla();
         }
 
-        // Quan cliquem un avió, obrim un formulari amb la seva informació (Fase 5)
+        // Quan cliquem un avió, obrim un formulari amb la seva informació 
         private void evento(object sender, EventArgs e)
         {
             PictureBox p = (PictureBox)sender; // l'avió que hem clicat

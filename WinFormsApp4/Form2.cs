@@ -29,7 +29,7 @@ namespace WinFormsApp4
         // Retorna true si la coordenada està dins de l'espai aeri (de 0 a 500)
         private bool CoordenadaCorrecta(double c)
         {
-            return c >= 0 && c <= 500;
+            return c >= 0 && c <= 799;
         }
 
         // Botó Acceptar: comprovem les dades i creem els dos vols

@@ -33,56 +33,61 @@ namespace WinFormsApp4
             button2 = new Button();
             labelConflicte = new Label();
             SuspendLayout();
-            //
+            // 
             // panel1
-            //
+            // 
             panel1.BackColor = Color.White;
             panel1.BorderStyle = BorderStyle.FixedSingle;
-            panel1.Location = new Point(10, 10);
+            panel1.Location = new Point(14, 17);
+            panel1.Margin = new Padding(4, 5, 4, 5);
             panel1.Name = "panel1";
-            panel1.Size = new Size(502, 502);
+            panel1.Size = new Size(799, 799);
             panel1.TabIndex = 0;
             panel1.Paint += panel1_Paint;
-            //
+            // 
             // button1
-            //
-            button1.Location = new Point(530, 20);
+            // 
+            button1.Location = new Point(852, 40);
+            button1.Margin = new Padding(4, 5, 4, 5);
             button1.Name = "button1";
-            button1.Size = new Size(130, 40);
+            button1.Size = new Size(186, 67);
             button1.TabIndex = 1;
             button1.Text = "Moure un cicle";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
-            //
+            // 
             // button2
-            //
-            button2.Location = new Point(530, 70);
+            // 
+            button2.Location = new Point(852, 117);
+            button2.Margin = new Padding(4, 5, 4, 5);
             button2.Name = "button2";
-            button2.Size = new Size(130, 40);
+            button2.Size = new Size(186, 67);
             button2.TabIndex = 2;
             button2.Text = "Reiniciar";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
-            //
+            // 
             // labelConflicte
-            //
+            // 
             labelConflicte.AutoSize = true;
             labelConflicte.Font = new Font("Segoe UI", 11F);
-            labelConflicte.Location = new Point(530, 130);
+            labelConflicte.Location = new Point(852, 210);
+            labelConflicte.Margin = new Padding(4, 0, 4, 0);
             labelConflicte.Name = "labelConflicte";
-            labelConflicte.Size = new Size(112, 20);
+            labelConflicte.Size = new Size(157, 30);
             labelConflicte.TabIndex = 3;
             labelConflicte.Text = "Sense conflicte";
-            //
+            // 
             // Form4
-            //
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            // 
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(680, 522);
+            ClientSize = new Size(1073, 870);
             Controls.Add(labelConflicte);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(panel1);
+            Margin = new Padding(4, 5, 4, 5);
             Name = "Form4";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Simulació";
