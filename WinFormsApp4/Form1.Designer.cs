@@ -32,58 +32,49 @@ namespace WinFormsApp4
             menuVols = new ToolStripMenuItem();
             menuDades = new ToolStripMenuItem();
             menuSimulacio = new ToolStripMenuItem();
-            label1 = new Label();
             menuStrip1.SuspendLayout();
             SuspendLayout();
-            //
+            // 
             // menuStrip1
-            //
+            // 
             menuStrip1.ImageScalingSize = new Size(20, 20);
             menuStrip1.Items.AddRange(new ToolStripItem[] { menuVols, menuDades, menuSimulacio });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(584, 24);
+            menuStrip1.Padding = new Padding(7, 3, 0, 3);
+            menuStrip1.Size = new Size(667, 30);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
-            //
+            // 
             // menuVols
-            //
+            // 
             menuVols.Name = "menuVols";
-            menuVols.Size = new Size(100, 20);
+            menuVols.Size = new Size(126, 24);
             menuVols.Text = "Dades dels vols";
             menuVols.Click += menuVols_Click;
-            //
+            // 
             // menuDades
-            //
+            // 
             menuDades.Name = "menuDades";
-            menuDades.Size = new Size(110, 20);
+            menuDades.Size = new Size(132, 24);
             menuDades.Text = "Dades simulació";
             menuDades.Click += menuDades_Click;
-            //
+            // 
             // menuSimulacio
-            //
+            // 
             menuSimulacio.Name = "menuSimulacio";
-            menuSimulacio.Size = new Size(70, 20);
+            menuSimulacio.Size = new Size(88, 24);
             menuSimulacio.Text = "Simulació";
             menuSimulacio.Click += menuSimulacio_Click;
-            //
-            // label1
-            //
-            label1.Font = new Font("Segoe UI", 12F);
-            label1.Location = new Point(40, 80);
-            label1.Name = "label1";
-            label1.Size = new Size(500, 120);
-            label1.TabIndex = 1;
-            label1.Text = "1. Dades dels vols: introdueix els dos plans de vol\r\n2. Dades simulació: distància de seguretat i temps de cicle\r\n3. Simulació: obre l'espai aeri";
-            //
+            // 
             // Form1
-            //
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(584, 261);
-            Controls.Add(label1);
+            ClientSize = new Size(667, 348);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
+            Margin = new Padding(3, 4, 3, 4);
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Simulador de vols";
@@ -99,6 +90,5 @@ namespace WinFormsApp4
         private ToolStripMenuItem menuVols;
         private ToolStripMenuItem menuDades;
         private ToolStripMenuItem menuSimulacio;
-        private Label label1;
     }
 }
