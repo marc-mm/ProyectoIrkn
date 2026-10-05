@@ -139,7 +139,7 @@ namespace WinFormsApp4
             float x2 = (float)vol2.GetCurrentPosition().GetX();
             float y2 = (float)vol2.GetCurrentPosition().GetY();
 
-            // DrawEllipse vol la cantonada de dalt a l'esquerra, l'amplada i l'alçada
+            //vol la cantonada de dalt a l'esquerra, l'amplada i l'alçada
             graphics.DrawEllipse(llapis1, x1 - r, y1 - r, 2 * r, 2 * r);
             graphics.DrawEllipse(llapis2, x2 - r, y2 - r, 2 * r, 2 * r);
 
