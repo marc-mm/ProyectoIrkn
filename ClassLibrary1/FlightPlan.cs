@@ -107,7 +107,34 @@ namespace FlightLib
             return conflicto;
         }
 
-        
+        // Versió 1: anticipa si hi haurà conflicte.
+        // Simula els dos vols des del principi fins que tots dos arriben.
+        // Retorna true si en algun moment estan més a prop que la distància de seguretat.
+        // Al final torna a posar els dos avions a la posició inicial.
+        public bool ConflictoFuturo(FlightPlan b, double distanciaSeguridad, double tiempoCiclo)
+        {
+            Restart();
+            b.Restart();
+
+            // Fem passos petits (la centèsima part d'un cicle) perquè no se'ns escapi
+            // un conflicte que passi entre dos cicles (per exemple, si els avions es creuen)
+            double paso = tiempoCiclo / 100;
+
+            bool conflicto = Conflicto(b, distanciaSeguridad);
+            while (!conflicto && !(HasArrived() && b.HasArrived()))
+            {
+                Move(paso);
+                b.Move(paso);
+                if (Conflicto(b, distanciaSeguridad))
+                    conflicto = true;
+            }
+
+            Restart();
+            b.Restart();
+            return conflicto;
+        }
+
+
         public void EscribeConsola()
         {
             Console.WriteLine("******************************");
