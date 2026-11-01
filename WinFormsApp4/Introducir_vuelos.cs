@@ -3,13 +3,13 @@ using FlightLib;
 namespace WinFormsApp4
 {
     // Formulari per introduir les dades dels dos plans de vol
-    public partial class Form2 : Form
+    public partial class Introducir_vuelos : Form
     {
         // Aquí guardem els dos vols perquè el Form1 els pugui llegir
         FlightPlan vol1;
         FlightPlan vol2;
 
-        public Form2()
+        public Introducir_vuelos()
         {
             InitializeComponent();
         }

@@ -1,6 +1,6 @@
 namespace WinFormsApp4
 {
-    partial class Form4
+    partial class Ventana_simulacion
     {
         /// <summary>
         /// Required designer variable.

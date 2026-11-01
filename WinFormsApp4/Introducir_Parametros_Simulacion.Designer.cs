@@ -1,6 +1,6 @@
 namespace WinFormsApp4
 {
-    partial class Form3
+    partial class Introducir_Parametros_Simulacion
     {
         /// <summary>
         /// Required designer variable.

@@ -1,6 +1,6 @@
 namespace WinFormsApp4
 {
-    partial class Form1
+    partial class Programa_principal
     {
         /// <summary>
         ///  Required designer variable.

@@ -10,7 +10,7 @@ namespace WinFormsApp4
         {
             // Inicia l'aplicació obrint el formulari principal (Form1)
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            Application.Run(new Programa_principal());
         }
     }
 }

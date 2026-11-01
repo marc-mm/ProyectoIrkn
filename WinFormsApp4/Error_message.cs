@@ -2,23 +2,21 @@ using FlightLib;
 
 namespace WinFormsApp4
 {
-    // Formulari que mostra la informació d'un avió (s'obre quan cliquem l'avió)
-    public partial class Form5 : Form
+    // Formulari que mostra la informació d'un avió
+    public partial class Error_message : Form
     {
-        FlightPlan vol; // el vol que hem de mostrar
+        FlightPlan vol;
 
-        public Form5()
+        public Error_message()
         {
             InitializeComponent();
         }
 
-        // El Form4 ens passa el vol amb aquesta funció
         public void pon_vol(FlightPlan v)
         {
             vol = v;
         }
 
-        // Quan s'obre el formulari escrivim les dades a les etiquetes
         private void Form5_Load(object sender, EventArgs e)
         {
             labelId.Text = "Identificador: " + vol.GetId();
@@ -33,7 +31,6 @@ namespace WinFormsApp4
                 labelArribat.Text = "Ha arribat al destí: No";
         }
 
-        // Botó Tancar
         private void button1_Click(object sender, EventArgs e)
         {
             Close();

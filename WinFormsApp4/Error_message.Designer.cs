@@ -1,6 +1,6 @@
 namespace WinFormsApp4
 {
-    partial class Form5
+    partial class Error_message
     {
         /// <summary>
         /// Required designer variable.

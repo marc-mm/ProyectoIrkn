@@ -1,6 +1,6 @@
 namespace WinFormsApp4
 {
-    partial class Form2
+    partial class Introducir_vuelos
     {
         /// <summary>
         /// Required designer variable.

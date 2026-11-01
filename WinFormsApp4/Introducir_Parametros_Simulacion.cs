@@ -1,13 +1,13 @@
 namespace WinFormsApp4
 {
     // Formulari per introduir la distància de seguretat i el temps de cicle
-    public partial class Form3 : Form
+    public partial class Introducir_Parametros_Simulacion : Form
     {
         // Valors que el Form1 llegirà (si l'usuari no accepta, es queden a 0)
         double distanciaSeguridad = 0;
         double tiempoCiclo = 0;
 
-        public Form3()
+        public Introducir_Parametros_Simulacion()
         {
             InitializeComponent();
         }

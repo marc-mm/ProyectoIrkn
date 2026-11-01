@@ -3,7 +3,7 @@ using FlightLib;
 namespace WinFormsApp4
 {
     // Formulari principal: té el menú i guarda totes les dades de la simulació
-    public partial class Form1 : Form
+    public partial class Programa_principal : Form
     {
         // Dades que necessitem per a la simulació
         FlightPlan vol1;
@@ -11,7 +11,7 @@ namespace WinFormsApp4
         double distanciaSeguridad = 0;
         double tiempoCiclo = 0;
 
-        public Form1()
+        public Programa_principal()
         {
             InitializeComponent();
         }
@@ -19,7 +19,7 @@ namespace WinFormsApp4
         // Opció 1 del menú: introduir les dades dels dos vols
         private void menuVols_Click(object sender, EventArgs e)
         {
-            Form2 F2 = new Form2();
+            Introducir_vuelos F2 = new Introducir_vuelos();
             F2.ShowDialog(); // el programa s'espera aquí fins que es tanca el Form2
 
             // Si l'usuari ha acceptat dades correctes, les guardem
@@ -33,7 +33,7 @@ namespace WinFormsApp4
         // Opció 2 del menú: introduir la distància de seguretat i el temps de cicle
         private void menuDades_Click(object sender, EventArgs e)
         {
-            Form3 F3 = new Form3();
+            Introducir_Parametros_Simulacion F3 = new Introducir_Parametros_Simulacion();
             F3.ShowDialog();
 
             // Si les dades són correctes (més grans que 0), les guardem
@@ -60,7 +60,7 @@ namespace WinFormsApp4
             }
 
             // Passem les dades al formulari de simulació i l'obrim
-            Form4 F4 = new Form4();
+            Ventana_simulacion F4 = new Ventana_simulacion();
             F4.pon_vols(vol1, vol2);
             F4.pon_distancia(distanciaSeguridad);
             F4.pon_ciclo(tiempoCiclo);
