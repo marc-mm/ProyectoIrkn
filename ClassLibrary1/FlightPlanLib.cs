@@ -2,13 +2,13 @@ using System;
 
 namespace FlightLib
 {
-    // Llista (vector) de plans de vol
+    // Llista de fins a 10 plans de vol.
     public class FlightPlanList
     {
         FlightPlan[] vector = new FlightPlan[10];
-        int number = 0; // quants plans hi ha a la llista
+        int number = 0;
 
-        // Afegeix un pla. Retorna -1 si la llista és plena, 0 si tot va bé
+        // Afegeix el pla p. Retorna 0 si s'ha afegit o -1 si la llista és plena.
         public int AddFlightPlan(FlightPlan p)
         {
             if (number == 10)
@@ -21,7 +21,7 @@ namespace FlightLib
             }
         }
 
-        // Retorna el pla de la posició i (o null si no existeix)
+        // Retorna el pla de la posició i, o null si no existeix.
         public FlightPlan GetFlightPlan(int i)
         {
             if (i < 0 || i >= number)
@@ -30,11 +30,10 @@ namespace FlightLib
                 return vector[i];
         }
 
-        // Retorna quants plans hi ha
         public int GetNumber()
         { return number; }
 
-        // Mou tots els avions de la llista
+        // Mou tots els avions de la llista durant el temps indicat.
         public void Move(double tiempo)
         {
             int i = 0;
@@ -45,7 +44,7 @@ namespace FlightLib
             }
         }
 
-        // Escriu tots els plans a la consola
+        // Mostra per consola tots els plans de la llista.
         public void EscribeConsola()
         {
             int i = 0;

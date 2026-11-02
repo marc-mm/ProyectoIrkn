@@ -2,7 +2,7 @@ using FlightLib;
 
 namespace WinFormsApp4
 {
-    // Formulari que mostra la informació d'un avió
+    // Finestra que mostra la informació d'un vol.
     public partial class Error_message : Form
     {
         FlightPlan vol;
@@ -12,11 +12,13 @@ namespace WinFormsApp4
             InitializeComponent();
         }
 
+        // Rep el vol que s'ha de mostrar. Cal cridar-la abans d'obrir la finestra.
         public void pon_vol(FlightPlan v)
         {
             vol = v;
         }
 
+        // Omple les etiquetes amb les dades del vol.
         private void Form5_Load(object sender, EventArgs e)
         {
             labelId.Text = "Identificador: " + vol.GetId();

@@ -1,9 +1,8 @@
 namespace WinFormsApp4
 {
-    // Formulari per introduir la distància de seguretat i el temps de cicle
+    // Finestra per introduir la distància de seguretat i el temps de cicle.
     public partial class Introducir_Parametros_Simulacion : Form
     {
-        // Valors que el Form1 llegirà (si l'usuari no accepta, es queden a 0)
         double distanciaSeguridad = 0;
         double tiempoCiclo = 0;
 
@@ -12,24 +11,24 @@ namespace WinFormsApp4
             InitializeComponent();
         }
 
-        // El Form1 fa servir aquestes funcions per llegir els valors
+        // Retorna la distància de seguretat introduïda (0 si no s'ha acceptat).
         public double dame_distancia()
         {
             return distanciaSeguridad;
         }
 
+        // Retorna el temps de cicle introduït (0 si no s'ha acceptat).
         public double dame_ciclo()
         {
             return tiempoCiclo;
         }
 
-        // Botó Acceptar: comprovem les dades
+        // Valida que els dos valors siguin números més grans que 0; si ho són, els guarda i tanca.
         private void button1_Click(object sender, EventArgs e)
         {
             double distancia;
             double ciclo;
 
-            // Si no són números, avisem
             try
             {
                 distancia = Convert.ToDouble(textBoxDistancia.Text);
@@ -41,14 +40,12 @@ namespace WinFormsApp4
                 return;
             }
 
-            // Han de ser més grans que 0
             if (distancia <= 0 || ciclo <= 0)
             {
                 MessageBox.Show("Els valors han de ser més grans que 0");
                 return;
             }
 
-            // Tot correcte: guardem i tanquem
             distanciaSeguridad = distancia;
             tiempoCiclo = ciclo;
             Close();

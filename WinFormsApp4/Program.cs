@@ -2,13 +2,10 @@ namespace WinFormsApp4
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
+        // Punt d'entrada: obre el formulari principal.
         [STAThread]
         static void Main()
         {
-            // Inicia l'aplicació obrint el formulari principal (Form1)
             ApplicationConfiguration.Initialize();
             Application.Run(new Programa_principal());
         }

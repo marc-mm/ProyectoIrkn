@@ -2,10 +2,9 @@ using FlightLib;
 
 namespace WinFormsApp4
 {
-    //mostra l'espai aeri i els dos avions
+    // Finestra de simulació: mostra l'espai aeri amb els dos avions i permet moure'ls i canviar-ne la velocitat.
     public partial class Ventana_simulacion : Form
     {
-        // Dades que ens passa el Form1
         FlightPlan vol1;
         FlightPlan vol2;
         double distanciaSeguridad;
@@ -19,6 +18,7 @@ namespace WinFormsApp4
             InitializeComponent();
         }
 
+        // pon_vols, pon_distancia i pon_ciclo reben les dades de la simulació abans d'obrir la finestra.
         public void pon_vols(FlightPlan v1, FlightPlan v2)
         {
             vol1 = v1;
@@ -35,23 +35,25 @@ namespace WinFormsApp4
             tiempoCiclo = c;
         }
 
+        // Crea els avions al panel, configura la taula (només la velocitat és editable) i el timer,
+        // avisa si hi haurà conflicte i dibuixa l'estat inicial.
         private void Form4_Load(object sender, EventArgs e)
         {
-//avio1
+            // El Tag identifica quin avió s'ha clicat a evento()
             avio1.Width = 20;
             avio1.Height = 20;
             avio1.BackColor = Color.Blue;
-            avio1.Tag = 1;                                
-            avio1.Click += new System.EventHandler(this.evento); 
+            avio1.Tag = 1;
+            avio1.Click += new System.EventHandler(this.evento);
             panel1.Controls.Add(avio1);
 
-            // Avió 2 
             avio2.Width = 20;
             avio2.Height = 20;
             avio2.BackColor = Color.Green;
             avio2.Tag = 2;
             avio2.Click += new System.EventHandler(this.evento);
             panel1.Controls.Add(avio2);
+            panel1.BackColor = Color.Black ;
 
             matriz.ColumnCount = 4;
             matriz.RowCount = 2;
@@ -60,18 +62,17 @@ namespace WinFormsApp4
             matriz.Columns[1].HeaderText = "Velocitat";
             matriz.Columns[2].HeaderText = "X";
             matriz.Columns[3].HeaderText = "Y";
-//per que no es pugui tocar altres parametres que la velocitat
             matriz.Columns[0].ReadOnly = true;
             matriz.Columns[2].ReadOnly = true;
             matriz.Columns[3].ReadOnly = true;
             EscriureVelocitats();
-//timer
             timer1.Interval = 500;
 
             AvisarConflicte();
             ActualitzarPantalla();
         }
 
+        // Escriu l'id i la velocitat de cada vol a la taula.
         private void EscriureVelocitats()
         {
             matriz.Rows[0].Cells[0].Value = vol1.GetId();
@@ -80,6 +81,7 @@ namespace WinFormsApp4
             matriz.Rows[1].Cells[1].Value = vol2.GetVelocidad();
         }
 
+        // Mostra un missatge indicant si amb les velocitats actuals hi haurà conflicte.
         private void AvisarConflicte()
         {
             if (vol1.ConflictoFuturo(vol2, distanciaSeguridad, tiempoCiclo))
@@ -88,8 +90,10 @@ namespace WinFormsApp4
                 MessageBox.Show("Amb aquestes velocitats no hi haurà cap conflicte");
         }
 
+        // Actualitza la posició dels avions, l'estat de conflicte, la distància i la taula, i redibuixa el panel.
         private void ActualitzarPantalla()
         {
+            // Es resta 10 per centrar el quadrat de 20x20 sobre la posició
             int x1 = (int)vol1.GetCurrentPosition().GetX();
             int y1 = (int)vol1.GetCurrentPosition().GetY();
             avio1.Location = new Point(x1 - 10, y1 - 10);
@@ -118,6 +122,7 @@ namespace WinFormsApp4
             panel1.Invalidate();
         }
 
+        // Mou els dos avions un cicle i atura el timer quan tots dos han arribat.
         private void MoureUnCicle()
         {
             vol1.Move(tiempoCiclo);
@@ -126,7 +131,7 @@ namespace WinFormsApp4
 
             if (vol1.HasArrived() && vol2.HasArrived())
             {
-                timer1.Stop(); 
+                timer1.Stop();
                 MessageBox.Show("Els dos avions han arribat al destí");
             }
         }
@@ -136,6 +141,7 @@ namespace WinFormsApp4
             MoureUnCicle();
         }
 
+        // Atura la simulació i torna els avions a la posició inicial.
         private void button2_Click(object sender, EventArgs e)
         {
             timer1.Stop();
@@ -159,6 +165,8 @@ namespace WinFormsApp4
             MoureUnCicle();
         }
 
+        // Llegeix les velocitats de la taula, les valida (numèriques i > 0) i les aplica als vols.
+        // Com que ConflictoFuturo reinicia els avions, la simulació torna a començar.
         private void buttonAplicar_Click(object sender, EventArgs e)
         {
             double v1, v2;
@@ -183,12 +191,12 @@ namespace WinFormsApp4
             vol1.SetVelocidad(v1);
             vol2.SetVelocidad(v2);
 
-            // Tornem a començar des de la posició inicial i avisem si hi haurà conflicte
             AvisarConflicte();
             ActualitzarPantalla();
         }
 
-        // Versió 1: botó "Proposar canvi de velocitat"
+        // Si hi haurà conflicte, busca una velocitat que l'eviti (primer canviant el vol 2 i, si no,
+        // el vol 1) i pregunta a l'usuari si la vol aplicar.
         private void buttonProposar_Click(object sender, EventArgs e)
         {
             timer1.Stop();
@@ -230,6 +238,9 @@ namespace WinFormsApp4
             ActualitzarPantalla();
         }
 
+        // Busca una velocitat per al vol v que eviti el conflicte, provant variacions del 5% en 5%
+        // (alternant més lent i més ràpid) fins a ±95%. Retorna la velocitat trobada o -1 si no n'hi ha cap.
+        // La velocitat original de v no es modifica.
         private double BuscarVelocitat(FlightPlan v)
         {
             double original = v.GetVelocidad();
@@ -238,13 +249,11 @@ namespace WinFormsApp4
 
             while (i <= 19 && trobada == -1)
             {
-                // Provem més lent
                 v.SetVelocidad(original * (1 - 0.05 * i));
                 if (!vol1.ConflictoFuturo(vol2, distanciaSeguridad, tiempoCiclo))
                     trobada = v.GetVelocidad();
                 else
                 {
-                    // Provem més ràpid
                     v.SetVelocidad(original * (1 + 0.05 * i));
                     if (!vol1.ConflictoFuturo(vol2, distanciaSeguridad, tiempoCiclo))
                         trobada = v.GetVelocidad();
@@ -256,11 +265,11 @@ namespace WinFormsApp4
             return trobada;
         }
 
-        // Quan cliquem un avió, obrim un formulari amb la seva informació
+        // En clicar un avió, obre una finestra amb la informació del seu vol.
         private void evento(object sender, EventArgs e)
         {
-            PictureBox p = (PictureBox)sender; // l'avió que hem clicat
-            int numero = (int)p.Tag;           // 1 o 2
+            PictureBox p = (PictureBox)sender;
+            int numero = (int)p.Tag;
 
             Error_message F5 = new Error_message();
             if (numero == 1)
@@ -270,14 +279,13 @@ namespace WinFormsApp4
             F5.ShowDialog();
         }
 
-        // Aquí dibuixem les línies i les el·lipses. S'executa cada cop que el panel es redibuixa
+        // Dibuixa la ruta de cada vol i un cercle al voltant de cada avió (vermell si hi ha conflicte).
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             System.Drawing.Graphics graphics = e.Graphics;
             Pen llapis1 = new Pen(Color.Blue);
             Pen llapis2 = new Pen(Color.Green);
 
-            // Fase 6: línia de l'origen al destí de cada vol
             graphics.DrawLine(llapis1,
                 (float)vol1.GetInitialPosition().GetX(), (float)vol1.GetInitialPosition().GetY(),
                 (float)vol1.GetFinalPosition().GetX(), (float)vol1.GetFinalPosition().GetY());
@@ -285,7 +293,8 @@ namespace WinFormsApp4
                 (float)vol2.GetInitialPosition().GetX(), (float)vol2.GetInitialPosition().GetY(),
                 (float)vol2.GetFinalPosition().GetX(), (float)vol2.GetFinalPosition().GetY());
 
-            float r = (float)(distanciaSeguridad / 2); // radi
+            // Radi = meitat de la distància de seguretat: els cercles es toquen just quan hi ha conflicte
+            float r = (float)(distanciaSeguridad / 2);
             float x1 = (float)vol1.GetCurrentPosition().GetX();
             float y1 = (float)vol1.GetCurrentPosition().GetY();
             float x2 = (float)vol2.GetCurrentPosition().GetX();

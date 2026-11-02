@@ -4,18 +4,15 @@ namespace FlightLib
 {
     public class Position
     {
-        // Atributs
-        double x; // coordenada X
-        double y; // coordenada Y
+        double x;
+        double y;
 
-        // Constructor
         public Position(double x, double y)
         {
             this.x = x;
             this.y = y;
         }
 
-        // Gets i Sets
         public double GetX()
         { return x; }
 
@@ -28,7 +25,7 @@ namespace FlightLib
         public void SetY(double y)
         { this.y = y; }
 
-        // Retorna la distància entre aquesta posició i la posició b
+        // Retorna la distància euclidiana entre aquesta posició i b.
         public double Distancia(Position b)
         {
             double resultat = Math.Sqrt((x - b.x) * (x - b.x) + (y - b.y) * (y - b.y));
