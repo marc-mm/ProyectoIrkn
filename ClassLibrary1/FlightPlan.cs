@@ -5,16 +5,18 @@ namespace FlightLib
     public class FlightPlan
     {
         string id;
+        string compania;
         Position initialPosition;
         Position currentPosition;
         Position finalPosition;
         double velocidad;
 
-        // Crea un pla de vol a partir de l'id, la posició inicial (ipx, ipy), la final (fpx, fpy) i la velocitat.
-        // La posició actual comença a la inicial.
-        public FlightPlan(string id, double ipx, double ipy, double fpx, double fpy, double velocidad)
+        // Crea un pla de vol a partir de l'id, la companyia, la posició inicial (ipx, ipy), la final (fpx, fpy)
+        // i la velocitat. La posició actual comença a la inicial.
+        public FlightPlan(string id, string compania, double ipx, double ipy, double fpx, double fpy, double velocidad)
         {
             this.id = id;
+            this.compania = compania;
             this.initialPosition = new Position(ipx, ipy);
             this.currentPosition = new Position(ipx, ipy);
             this.finalPosition = new Position(fpx, fpy);
@@ -23,6 +25,9 @@ namespace FlightLib
 
         public string GetId()
         { return id; }
+
+        public string GetCompania()
+        { return compania; }
 
         public Position GetInitialPosition()
         { return initialPosition; }
@@ -38,6 +43,9 @@ namespace FlightLib
 
         public void SetId(string id)
         { this.id = id; }
+
+        public void SetCompania(string compania)
+        { this.compania = compania; }
 
         public void SetInitialPosition(Position p)
         { this.initialPosition = p; }
@@ -138,6 +146,7 @@ namespace FlightLib
             Console.WriteLine("******************************");
             Console.WriteLine("Dades del vol: ");
             Console.WriteLine("Identificador: {0}", id);
+            Console.WriteLine("Companyia: {0}", compania);
             Console.WriteLine("Velocitat: {0:f2}", velocidad);
             Console.WriteLine("Posició actual: ({0:f2} -- {1:f2})", currentPosition.GetX(), currentPosition.GetY());
             if (HasArrived())

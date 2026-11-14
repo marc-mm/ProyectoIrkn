@@ -24,7 +24,7 @@ namespace WinFormsApp4
         }
 
         // Valida que els dos valors siguin números més grans que 0; si ho són, els guarda i tanca.
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonAcceptar_Click(object sender, EventArgs e)
         {
             double distancia;
             double ciclo;

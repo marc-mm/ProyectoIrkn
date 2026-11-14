@@ -30,23 +30,25 @@ namespace WinFormsApp4
         {
             components = new System.ComponentModel.Container();
             panel1 = new Panel();
-            button1 = new Button();
-            button2 = new Button();
-            labelConflicte = new Label();
+            buttonMoure = new Button();
+            buttonDesfer = new Button();
             buttonIniciar = new Button();
             buttonAturar = new Button();
-            labelDistancia = new Label();
+            buttonReiniciar = new Button();
+            buttonGuardar = new Button();
+            labelConflicte = new Label();
             labelLlista = new Label();
             matriz = new DataGridView();
             buttonAplicar = new Button();
             buttonProposar = new Button();
+            labelAjuda = new Label();
             timer1 = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)matriz).BeginInit();
             SuspendLayout();
             //
             // panel1
             //
-            panel1.BackColor = Color.White;
+            panel1.BackColor = Color.Black;
             panel1.BorderStyle = BorderStyle.FixedSingle;
             panel1.Location = new Point(11, 14);
             panel1.Margin = new Padding(3, 4, 3, 4);
@@ -55,135 +57,149 @@ namespace WinFormsApp4
             panel1.TabIndex = 0;
             panel1.Paint += panel1_Paint;
             //
-            // button1
+            // buttonMoure
             //
-            button1.Location = new Point(835, 20);
-            button1.Margin = new Padding(3, 4, 3, 4);
-            button1.Name = "button1";
-            button1.Size = new Size(149, 54);
-            button1.TabIndex = 1;
-            button1.Text = "Moure un cicle";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            buttonMoure.Location = new Point(835, 14);
+            buttonMoure.Name = "buttonMoure";
+            buttonMoure.Size = new Size(190, 45);
+            buttonMoure.TabIndex = 1;
+            buttonMoure.Text = "Moure un cicle";
+            buttonMoure.UseVisualStyleBackColor = true;
+            buttonMoure.Click += buttonMoure_Click;
             //
-            // button2
+            // buttonDesfer
             //
-            button2.Location = new Point(995, 20);
-            button2.Margin = new Padding(3, 4, 3, 4);
-            button2.Name = "button2";
-            button2.Size = new Size(149, 54);
-            button2.TabIndex = 2;
-            button2.Text = "Reiniciar";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
+            buttonDesfer.Location = new Point(1035, 14);
+            buttonDesfer.Name = "buttonDesfer";
+            buttonDesfer.Size = new Size(190, 45);
+            buttonDesfer.TabIndex = 2;
+            buttonDesfer.Text = "Desfer últim cicle";
+            buttonDesfer.UseVisualStyleBackColor = true;
+            buttonDesfer.Click += buttonDesfer_Click;
             //
             // buttonIniciar
             //
-            buttonIniciar.Location = new Point(835, 85);
-            buttonIniciar.Margin = new Padding(3, 4, 3, 4);
+            buttonIniciar.Location = new Point(835, 67);
             buttonIniciar.Name = "buttonIniciar";
-            buttonIniciar.Size = new Size(149, 54);
+            buttonIniciar.Size = new Size(190, 45);
             buttonIniciar.TabIndex = 3;
-            buttonIniciar.Text = "Iniciar";
+            buttonIniciar.Text = "Iniciar automàtic";
             buttonIniciar.UseVisualStyleBackColor = true;
             buttonIniciar.Click += buttonIniciar_Click;
             //
             // buttonAturar
             //
-            buttonAturar.Location = new Point(995, 85);
-            buttonAturar.Margin = new Padding(3, 4, 3, 4);
+            buttonAturar.Location = new Point(1035, 67);
             buttonAturar.Name = "buttonAturar";
-            buttonAturar.Size = new Size(149, 54);
+            buttonAturar.Size = new Size(190, 45);
             buttonAturar.TabIndex = 4;
             buttonAturar.Text = "Aturar";
             buttonAturar.UseVisualStyleBackColor = true;
             buttonAturar.Click += buttonAturar_Click;
             //
+            // buttonReiniciar
+            //
+            buttonReiniciar.Location = new Point(835, 120);
+            buttonReiniciar.Name = "buttonReiniciar";
+            buttonReiniciar.Size = new Size(190, 45);
+            buttonReiniciar.TabIndex = 5;
+            buttonReiniciar.Text = "Reiniciar";
+            buttonReiniciar.UseVisualStyleBackColor = true;
+            buttonReiniciar.Click += buttonReiniciar_Click;
+            //
+            // buttonGuardar
+            //
+            buttonGuardar.Location = new Point(1035, 120);
+            buttonGuardar.Name = "buttonGuardar";
+            buttonGuardar.Size = new Size(190, 45);
+            buttonGuardar.TabIndex = 6;
+            buttonGuardar.Text = "Guardar vols";
+            buttonGuardar.UseVisualStyleBackColor = true;
+            buttonGuardar.Click += buttonGuardar_Click;
+            //
             // labelConflicte
             //
-            labelConflicte.AutoSize = true;
-            labelConflicte.Font = new Font("Segoe UI", 11F);
-            labelConflicte.Location = new Point(835, 160);
+            labelConflicte.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            labelConflicte.Location = new Point(835, 180);
             labelConflicte.Name = "labelConflicte";
-            labelConflicte.Size = new Size(138, 25);
-            labelConflicte.TabIndex = 5;
+            labelConflicte.Size = new Size(390, 55);
+            labelConflicte.TabIndex = 7;
             labelConflicte.Text = "Sense conflicte";
-            //
-            // labelDistancia
-            //
-            labelDistancia.AutoSize = true;
-            labelDistancia.Location = new Point(835, 200);
-            labelDistancia.Name = "labelDistancia";
-            labelDistancia.Size = new Size(170, 20);
-            labelDistancia.TabIndex = 6;
-            labelDistancia.Text = "Distància entre els vols:";
             //
             // labelLlista
             //
             labelLlista.AutoSize = true;
-            labelLlista.Location = new Point(835, 250);
+            labelLlista.Location = new Point(835, 240);
             labelLlista.Name = "labelLlista";
             labelLlista.Size = new Size(290, 20);
-            labelLlista.TabIndex = 7;
+            labelLlista.TabIndex = 8;
             labelLlista.Text = "Llista de vols (pots canviar la velocitat):";
             //
             // matriz
             //
             matriz.AllowUserToAddRows = false;
+            matriz.AllowUserToDeleteRows = false;
             matriz.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            matriz.Location = new Point(835, 275);
-            matriz.Margin = new Padding(3, 4, 3, 4);
+            matriz.Location = new Point(835, 265);
             matriz.Name = "matriz";
-            matriz.ScrollBars = ScrollBars.None;
-            matriz.Size = new Size(309, 100);
-            matriz.TabIndex = 8;
+            matriz.ScrollBars = ScrollBars.Vertical;
+            matriz.Size = new Size(390, 300);
+            matriz.TabIndex = 9;
             //
             // buttonAplicar
             //
-            buttonAplicar.Location = new Point(835, 385);
-            buttonAplicar.Margin = new Padding(3, 4, 3, 4);
+            buttonAplicar.Location = new Point(835, 575);
             buttonAplicar.Name = "buttonAplicar";
-            buttonAplicar.Size = new Size(309, 54);
-            buttonAplicar.TabIndex = 9;
+            buttonAplicar.Size = new Size(390, 45);
+            buttonAplicar.TabIndex = 10;
             buttonAplicar.Text = "Aplicar velocitats i reiniciar";
             buttonAplicar.UseVisualStyleBackColor = true;
             buttonAplicar.Click += buttonAplicar_Click;
             //
             // buttonProposar
             //
-            buttonProposar.Location = new Point(835, 450);
-            buttonProposar.Margin = new Padding(3, 4, 3, 4);
+            buttonProposar.Location = new Point(835, 628);
             buttonProposar.Name = "buttonProposar";
-            buttonProposar.Size = new Size(309, 54);
-            buttonProposar.TabIndex = 10;
-            buttonProposar.Text = "Proposar canvi de velocitat";
+            buttonProposar.Size = new Size(390, 45);
+            buttonProposar.TabIndex = 11;
+            buttonProposar.Text = "Proposar canvis de velocitat";
             buttonProposar.UseVisualStyleBackColor = true;
             buttonProposar.Click += buttonProposar_Click;
+            //
+            // labelAjuda
+            //
+            labelAjuda.Location = new Point(835, 690);
+            labelAjuda.Name = "labelAjuda";
+            labelAjuda.Size = new Size(390, 120);
+            labelAjuda.TabIndex = 12;
+            labelAjuda.Text = "Clica un avió per veure'n les dades i la distància als altres vols.\n\nEl cercle de cada avió és la seva zona de seguretat: es torna vermell si hi ha conflicte.";
             //
             // timer1
             //
             timer1.Tick += timer1_Tick;
             //
-            // Form4
+            // Ventana_simulacion
             //
             AutoScaleMode = AutoScaleMode.None;
-            ClientSize = new Size(1165, 830);
+            ClientSize = new Size(1240, 830);
+            Controls.Add(labelAjuda);
             Controls.Add(buttonProposar);
             Controls.Add(buttonAplicar);
             Controls.Add(matriz);
             Controls.Add(labelLlista);
-            Controls.Add(labelDistancia);
+            Controls.Add(labelConflicte);
+            Controls.Add(buttonGuardar);
+            Controls.Add(buttonReiniciar);
             Controls.Add(buttonAturar);
             Controls.Add(buttonIniciar);
-            Controls.Add(labelConflicte);
-            Controls.Add(button2);
-            Controls.Add(button1);
+            Controls.Add(buttonDesfer);
+            Controls.Add(buttonMoure);
             Controls.Add(panel1);
             Margin = new Padding(3, 4, 3, 4);
-            Name = "Form4";
+            Name = "Ventana_simulacion";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Simulació";
-            Load += Form4_Load;
+            Load += Ventana_simulacion_Load;
             ((System.ComponentModel.ISupportInitialize)matriz).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -192,16 +208,18 @@ namespace WinFormsApp4
         #endregion
 
         private Panel panel1;
-        private Button button1;
-        private Button button2;
-        private Label labelConflicte;
+        private Button buttonMoure;
+        private Button buttonDesfer;
         private Button buttonIniciar;
         private Button buttonAturar;
-        private Label labelDistancia;
+        private Button buttonReiniciar;
+        private Button buttonGuardar;
+        private Label labelConflicte;
         private Label labelLlista;
         private DataGridView matriz;
         private Button buttonAplicar;
         private Button buttonProposar;
+        private Label labelAjuda;
         private System.Windows.Forms.Timer timer1;
     }
 }

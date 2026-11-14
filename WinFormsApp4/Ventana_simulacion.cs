@@ -2,27 +2,26 @@ using FlightLib;
 
 namespace WinFormsApp4
 {
-    // Finestra de simulació: mostra l'espai aeri amb els dos avions i permet moure'ls i canviar-ne la velocitat.
+    // Finestra de simulació: mostra l'espai aeri amb tots els avions i permet moure'ls, desfer passos,
+    // canviar-ne la velocitat i guardar la simulació en un fitxer.
     public partial class Ventana_simulacion : Form
     {
-        FlightPlan vol1;
-        FlightPlan vol2;
+        FlightPlanList vuelos;
         double distanciaSeguridad;
         double tiempoCiclo;
 
-        PictureBox avio1 = new PictureBox();
-        PictureBox avio2 = new PictureBox();
+        List<PictureBox> aviones = new List<PictureBox>();
+        Color[] colores = { Color.DodgerBlue, Color.LimeGreen, Color.Orange, Color.Magenta, Color.Cyan, Color.Yellow, Color.White, Color.HotPink };
 
         public Ventana_simulacion()
         {
             InitializeComponent();
         }
 
-        // pon_vols, pon_distancia i pon_ciclo reben les dades de la simulació abans d'obrir la finestra.
-        public void pon_vols(FlightPlan v1, FlightPlan v2)
+        // pon_vuelos, pon_distancia i pon_ciclo reben les dades de la simulació abans d'obrir la finestra.
+        public void pon_vuelos(FlightPlanList vuelos)
         {
-            vol1 = v1;
-            vol2 = v2;
+            this.vuelos = vuelos;
         }
 
         public void pon_distancia(double d)
@@ -35,118 +34,143 @@ namespace WinFormsApp4
             tiempoCiclo = c;
         }
 
-        // Crea els avions al panel, configura la taula (només la velocitat és editable) i el timer,
-        // avisa si hi haurà conflicte i dibuixa l'estat inicial.
-        private void Form4_Load(object sender, EventArgs e)
+        // Crea un quadrat per a cada avió, prepara la taula (només la velocitat és editable),
+        // avisa dels conflictes que hi haurà i dibuixa l'estat inicial.
+        private void Ventana_simulacion_Load(object sender, EventArgs e)
         {
-            // El Tag identifica quin avió s'ha clicat a evento()
-            avio1.Width = 20;
-            avio1.Height = 20;
-            avio1.BackColor = Color.Blue;
-            avio1.Tag = 1;
-            avio1.Click += new System.EventHandler(this.evento);
-            panel1.Controls.Add(avio1);
+            panel1.BackColor = Color.Black;
 
-            avio2.Width = 20;
-            avio2.Height = 20;
-            avio2.BackColor = Color.Green;
-            avio2.Tag = 2;
-            avio2.Click += new System.EventHandler(this.evento);
-            panel1.Controls.Add(avio2);
-            panel1.BackColor = Color.Black ;
+            // El Tag guarda la posició del vol a la llista per saber quin avió s'ha clicat a evento()
+            int i = 0;
+            while (i < vuelos.GetNumber())
+            {
+                PictureBox avion = new PictureBox();
+                avion.Width = 20;
+                avion.Height = 20;
+                avion.BackColor = ColorVuelo(i);
+                avion.Tag = i;
+                avion.Click += new System.EventHandler(this.evento);
+                panel1.Controls.Add(avion);
+                aviones.Add(avion);
+                i++;
+            }
 
-            matriz.ColumnCount = 4;
-            matriz.RowCount = 2;
+            matriz.ColumnCount = 5;
+            matriz.RowCount = vuelos.GetNumber();
             matriz.RowHeadersVisible = false;
             matriz.Columns[0].HeaderText = "Vol";
-            matriz.Columns[1].HeaderText = "Velocitat";
-            matriz.Columns[2].HeaderText = "X";
-            matriz.Columns[3].HeaderText = "Y";
+            matriz.Columns[1].HeaderText = "Companyia";
+            matriz.Columns[2].HeaderText = "Velocitat";
+            matriz.Columns[3].HeaderText = "X";
+            matriz.Columns[4].HeaderText = "Y";
             matriz.Columns[0].ReadOnly = true;
-            matriz.Columns[2].ReadOnly = true;
+            matriz.Columns[1].ReadOnly = true;
             matriz.Columns[3].ReadOnly = true;
+            matriz.Columns[4].ReadOnly = true;
             EscriureVelocitats();
             timer1.Interval = 500;
 
-            AvisarConflicte();
+            AvisarConflictes();
             ActualitzarPantalla();
         }
 
-        // Escriu l'id i la velocitat de cada vol a la taula.
+        // Retorna el color amb què es dibuixa el vol de la posició i.
+        private Color ColorVuelo(int i)
+        {
+            return colores[i % colores.Length];
+        }
+
+        // Escriu l'id, la companyia i la velocitat de cada vol a la taula.
         private void EscriureVelocitats()
         {
-            matriz.Rows[0].Cells[0].Value = vol1.GetId();
-            matriz.Rows[0].Cells[1].Value = vol1.GetVelocidad();
-            matriz.Rows[1].Cells[0].Value = vol2.GetId();
-            matriz.Rows[1].Cells[1].Value = vol2.GetVelocidad();
+            int i = 0;
+            while (i < vuelos.GetNumber())
+            {
+                FlightPlan vuelo = vuelos.GetFlightPlan(i);
+                matriz.Rows[i].Cells[0].Value = vuelo.GetId();
+                matriz.Rows[i].Cells[1].Value = vuelo.GetCompania();
+                matriz.Rows[i].Cells[2].Value = vuelo.GetVelocidad();
+                i++;
+            }
         }
 
-        // Mostra un missatge indicant si amb les velocitats actuals hi haurà conflicte.
-        private void AvisarConflicte()
+        // Mostra un missatge amb les parelles de vols que tindran conflicte amb les velocitats actuals.
+        // Deixa la simulació reiniciada.
+        private void AvisarConflictes()
         {
-            if (vol1.ConflictoFuturo(vol2, distanciaSeguridad, tiempoCiclo))
-                MessageBox.Show("Atenció: amb aquestes velocitats HI HAURÀ CONFLICTE.\nPots clicar \"Proposar canvi de velocitat\" o canviar-les tu a la llista.");
-            else
+            string conflictos = vuelos.ConflictosFuturos(distanciaSeguridad, tiempoCiclo);
+            if (conflictos == "")
                 MessageBox.Show("Amb aquestes velocitats no hi haurà cap conflicte");
+            else
+                MessageBox.Show("Atenció: amb aquestes velocitats HI HAURÀ CONFLICTE entre:\n" + conflictos +
+                    "\nPots clicar \"Proposar canvis de velocitat\" o canviar-les tu a la llista.");
         }
 
-        // Actualitza la posició dels avions, l'estat de conflicte, la distància i la taula, i redibuixa el panel.
+        // Actualitza la posició dels avions, la taula i l'avís de conflicte, i redibuixa el panel.
         private void ActualitzarPantalla()
         {
-            // Es resta 10 per centrar el quadrat de 20x20 sobre la posició
-            int x1 = (int)vol1.GetCurrentPosition().GetX();
-            int y1 = (int)vol1.GetCurrentPosition().GetY();
-            avio1.Location = new Point(x1 - 10, y1 - 10);
-
-            int x2 = (int)vol2.GetCurrentPosition().GetX();
-            int y2 = (int)vol2.GetCurrentPosition().GetY();
-            avio2.Location = new Point(x2 - 10, y2 - 10);
-
-            if (vol1.Conflicto(vol2, distanciaSeguridad))
+            int i = 0;
+            while (i < vuelos.GetNumber())
             {
-                labelConflicte.Text = "CONFLICTE!";
-                labelConflicte.ForeColor = Color.Red;
+                Position actual = vuelos.GetFlightPlan(i).GetCurrentPosition();
+                // Es resta 10 per centrar el quadrat de 20x20 sobre la posició
+                aviones[i].Location = new Point((int)actual.GetX() - 10, (int)actual.GetY() - 10);
+
+                matriz.Rows[i].Cells[3].Value = actual.GetX().ToString("0.00");
+                matriz.Rows[i].Cells[4].Value = actual.GetY().ToString("0.00");
+                if (vuelos.EnConflicto(i, distanciaSeguridad))
+                    matriz.Rows[i].DefaultCellStyle.BackColor = Color.LightCoral;
+                else
+                    matriz.Rows[i].DefaultCellStyle.BackColor = Color.White;
+                i++;
+            }
+
+            string conflictos = vuelos.ConflictosActuales(distanciaSeguridad);
+            if (conflictos == "")
+            {
+                labelConflicte.Text = "Sense conflicte";
+                labelConflicte.ForeColor = Color.Green;
             }
             else
             {
-                labelConflicte.Text = "Sense conflicte";
-                labelConflicte.ForeColor = Color.Black;
+                labelConflicte.Text = "CONFLICTE! " + conflictos;
+                labelConflicte.ForeColor = Color.Red;
             }
-
-            labelDistancia.Text = "Distància entre els vols: " + vol1.Distance(vol2).ToString("0.00");
-            matriz.Rows[0].Cells[2].Value = vol1.GetCurrentPosition().GetX().ToString("0.00");
-            matriz.Rows[0].Cells[3].Value = vol1.GetCurrentPosition().GetY().ToString("0.00");
-            matriz.Rows[1].Cells[2].Value = vol2.GetCurrentPosition().GetX().ToString("0.00");
-            matriz.Rows[1].Cells[3].Value = vol2.GetCurrentPosition().GetY().ToString("0.00");
 
             panel1.Invalidate();
         }
 
-        // Mou els dos avions un cicle i atura el timer quan tots dos han arribat.
+        // Mou tots els avions un cicle. Quan tots han arribat atura el timer i ho avisa.
         private void MoureUnCicle()
         {
-            vol1.Move(tiempoCiclo);
-            vol2.Move(tiempoCiclo);
-            ActualitzarPantalla();
-
-            if (vol1.HasArrived() && vol2.HasArrived())
+            if (vuelos.TodosHanLlegado())
             {
                 timer1.Stop();
-                MessageBox.Show("Els dos avions han arribat al destí");
+                MessageBox.Show("Tots els avions ja són al destí");
+                return;
+            }
+
+            vuelos.Move(tiempoCiclo);
+            ActualitzarPantalla();
+
+            if (vuelos.TodosHanLlegado())
+            {
+                timer1.Stop();
+                MessageBox.Show("Tots els avions han arribat al destí");
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonMoure_Click(object sender, EventArgs e)
         {
             MoureUnCicle();
         }
 
-        // Atura la simulació i torna els avions a la posició inicial.
-        private void button2_Click(object sender, EventArgs e)
+        // Torna els avions a la posició que tenien abans de l'últim cicle.
+        private void buttonDesfer_Click(object sender, EventArgs e)
         {
             timer1.Stop();
-            vol1.Restart();
-            vol2.Restart();
+            if (!vuelos.Deshacer())
+                MessageBox.Show("No hi ha cap pas per desfer");
             ActualitzarPantalla();
         }
 
@@ -165,161 +189,161 @@ namespace WinFormsApp4
             MoureUnCicle();
         }
 
-        // Llegeix les velocitats de la taula, les valida (numèriques i > 0) i les aplica als vols.
-        // Com que ConflictoFuturo reinicia els avions, la simulació torna a començar.
+        // Atura la simulació i torna els avions a la posició inicial.
+        private void buttonReiniciar_Click(object sender, EventArgs e)
+        {
+            timer1.Stop();
+            vuelos.Restart();
+            ActualitzarPantalla();
+        }
+
+        // Deixa triar un fitxer i hi guarda els vols amb la posició actual, per poder continuar la simulació més endavant.
+        private void buttonGuardar_Click(object sender, EventArgs e)
+        {
+            timer1.Stop();
+            SaveFileDialog dialogo = new SaveFileDialog();
+            dialogo.Filter = "Fitxers de text (*.txt)|*.txt";
+            if (dialogo.ShowDialog() != DialogResult.OK)
+                return;
+
+            if (vuelos.GuardarFichero(dialogo.FileName) == 0)
+                MessageBox.Show("Vols guardats. Carrega aquest fitxer més endavant per continuar la simulació des d'aquest punt");
+            else
+                MessageBox.Show("No s'ha pogut guardar el fitxer");
+        }
+
+        // Llegeix les velocitats de la taula, comprova que siguin números més grans que 0 i les aplica als vols.
+        // Després reinicia la simulació i avisa dels conflictes que hi haurà.
         private void buttonAplicar_Click(object sender, EventArgs e)
         {
-            double v1, v2;
+            matriz.EndEdit();
+            List<double> velocidades = new List<double>();
+            int i = 0;
             try
             {
-                v1 = Convert.ToDouble(matriz.Rows[0].Cells[1].Value);
-                v2 = Convert.ToDouble(matriz.Rows[1].Cells[1].Value);
+                while (i < vuelos.GetNumber())
+                {
+                    double v = Convert.ToDouble(matriz.Rows[i].Cells[2].Value);
+                    if (v <= 0)
+                    {
+                        MessageBox.Show("La velocitat del vol " + vuelos.GetFlightPlan(i).GetId() + " ha de ser més gran que 0");
+                        return;
+                    }
+                    velocidades.Add(v);
+                    i++;
+                }
             }
             catch (FormatException)
             {
-                MessageBox.Show("Error de format: la velocitat ha de ser un número");
-                return;
-            }
-
-            if (v1 <= 0 || v2 <= 0)
-            {
-                MessageBox.Show("La velocitat ha de ser més gran que 0");
+                MessageBox.Show("Error de format: la velocitat del vol " + vuelos.GetFlightPlan(i).GetId() + " ha de ser un número");
                 return;
             }
 
             timer1.Stop();
-            vol1.SetVelocidad(v1);
-            vol2.SetVelocidad(v2);
+            i = 0;
+            while (i < vuelos.GetNumber())
+            {
+                vuelos.GetFlightPlan(i).SetVelocidad(velocidades[i]);
+                i++;
+            }
 
-            AvisarConflicte();
+            AvisarConflictes();
             ActualitzarPantalla();
         }
 
-        // Si hi haurà conflicte, busca una velocitat que l'eviti (primer canviant el vol 2 i, si no,
-        // el vol 1) i pregunta a l'usuari si la vol aplicar.
+        // Per a cada vol que tindrà conflicte, busca una velocitat que l'eviti i pregunta a l'usuari si la vol aplicar.
+        // Al final avisa si encara queden conflictes. Deixa la simulació reiniciada.
         private void buttonProposar_Click(object sender, EventArgs e)
         {
             timer1.Stop();
 
-            if (!vol1.ConflictoFuturo(vol2, distanciaSeguridad, tiempoCiclo))
+            if (vuelos.ConflictosFuturos(distanciaSeguridad, tiempoCiclo) == "")
             {
-                MessageBox.Show("No hi haurà conflicte, no cal canviar cap velocitat");
+                MessageBox.Show("No hi haurà cap conflicte, no cal canviar cap velocitat");
                 ActualitzarPantalla();
                 return;
             }
 
-            FlightPlan volACanviar = vol2;
-            double nova = BuscarVelocitat(vol2);
-            if (nova == -1)
+            int i = 0;
+            while (i < vuelos.GetNumber())
             {
-                volACanviar = vol1;
-                nova = BuscarVelocitat(vol1);
-            }
-
-            if (nova == -1)
-            {
-                MessageBox.Show("No he trobat cap canvi de velocitat que eviti el conflicte");
-            }
-            else
-            {
-                DialogResult resposta = MessageBox.Show(
-                    "Proposta: canviar la velocitat del vol " + volACanviar.GetId() +
-                    " de " + volACanviar.GetVelocidad().ToString("0.00") + " a " + nova.ToString("0.00") +
-                    ".\nVols aplicar-la?", "Proposta", MessageBoxButtons.YesNo);
-
-                if (resposta == DialogResult.Yes)
+                if (vuelos.ConflictoFuturo(i, distanciaSeguridad, tiempoCiclo))
                 {
-                    volACanviar.SetVelocidad(nova);
-                    EscriureVelocitats();
-                    MessageBox.Show("Velocitat canviada. Ara ja no hi haurà conflicte");
+                    FlightPlan vuelo = vuelos.GetFlightPlan(i);
+                    double nueva = vuelos.BuscarVelocidad(i, distanciaSeguridad, tiempoCiclo);
+                    if (nueva != -1)
+                    {
+                        DialogResult respuesta = MessageBox.Show(
+                            "Proposta: canviar la velocitat del vol " + vuelo.GetId() +
+                            " de " + vuelo.GetVelocidad().ToString("0.00") + " a " + nueva.ToString("0.00") +
+                            ".\nVols aplicar-la?", "Proposta", MessageBoxButtons.YesNo);
+
+                        if (respuesta == DialogResult.Yes)
+                            vuelo.SetVelocidad(nueva);
+                    }
                 }
+                i++;
             }
+            EscriureVelocitats();
+
+            string conflictos = vuelos.ConflictosFuturos(distanciaSeguridad, tiempoCiclo);
+            if (conflictos == "")
+                MessageBox.Show("Ara ja no hi haurà cap conflicte");
+            else
+                MessageBox.Show("Encara hi haurà conflicte entre:\n" + conflictos);
 
             ActualitzarPantalla();
         }
 
-        // Busca una velocitat per al vol v que eviti el conflicte, provant variacions del 5% en 5%
-        // (alternant més lent i més ràpid) fins a ±95%. Retorna la velocitat trobada o -1 si no n'hi ha cap.
-        // La velocitat original de v no es modifica.
-        private double BuscarVelocitat(FlightPlan v)
-        {
-            double original = v.GetVelocidad();
-            double trobada = -1;
-            int i = 1;
-
-            while (i <= 19 && trobada == -1)
-            {
-                v.SetVelocidad(original * (1 - 0.05 * i));
-                if (!vol1.ConflictoFuturo(vol2, distanciaSeguridad, tiempoCiclo))
-                    trobada = v.GetVelocidad();
-                else
-                {
-                    v.SetVelocidad(original * (1 + 0.05 * i));
-                    if (!vol1.ConflictoFuturo(vol2, distanciaSeguridad, tiempoCiclo))
-                        trobada = v.GetVelocidad();
-                }
-                i++;
-            }
-
-            v.SetVelocidad(original);
-            return trobada;
-        }
-
-        // En clicar un avió, obre una finestra amb la informació del seu vol.
+        // En clicar un avió, obre una finestra amb les dades del seu vol.
         private void evento(object sender, EventArgs e)
         {
-            PictureBox p = (PictureBox)sender;
-            int numero = (int)p.Tag;
+            PictureBox avion = (PictureBox)sender;
+            int indice = (int)avion.Tag;
 
-            Error_message F5 = new Error_message();
-            if (numero == 1)
-                F5.pon_vol(vol1);
-            else
-                F5.pon_vol(vol2);
+            Datos_vuelo F5 = new Datos_vuelo();
+            F5.pon_vuelo(vuelos, indice);
             F5.ShowDialog();
         }
 
-        // Dibuixa la ruta de cada vol i un cercle al voltant de cada avió (vermell si hi ha conflicte).
+        // Dibuixa per a cada vol la seva ruta, el seu identificador i un cercle de seguretat al voltant
+        // de l'avió (vermell i més gruixut si està en conflicte).
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
-            System.Drawing.Graphics graphics = e.Graphics;
-            Pen llapis1 = new Pen(Color.Blue);
-            Pen llapis2 = new Pen(Color.Green);
+            Graphics graphics = e.Graphics;
+            Pen lapiz = new Pen(Color.White);
+            SolidBrush pincel = new SolidBrush(Color.White);
 
-            graphics.DrawLine(llapis1,
-                (float)vol1.GetInitialPosition().GetX(), (float)vol1.GetInitialPosition().GetY(),
-                (float)vol1.GetFinalPosition().GetX(), (float)vol1.GetFinalPosition().GetY());
-            graphics.DrawLine(llapis2,
-                (float)vol2.GetInitialPosition().GetX(), (float)vol2.GetInitialPosition().GetY(),
-                (float)vol2.GetFinalPosition().GetX(), (float)vol2.GetFinalPosition().GetY());
-
-            // Radi = meitat de la distància de seguretat: els cercles es toquen just quan hi ha conflicte
+            // Radi = meitat de la distància de seguretat: dos cercles es toquen just quan hi ha conflicte
             float r = (float)(distanciaSeguridad / 2);
-            float x1 = (float)vol1.GetCurrentPosition().GetX();
-            float y1 = (float)vol1.GetCurrentPosition().GetY();
-            float x2 = (float)vol2.GetCurrentPosition().GetX();
-            float y2 = (float)vol2.GetCurrentPosition().GetY();
 
-            Pen llapisCercle1;
-            Pen llapisCercle2;
-            if (vol1.Conflicto(vol2, distanciaSeguridad))
+            int i = 0;
+            while (i < vuelos.GetNumber())
             {
-                llapisCercle1 = new Pen(Color.Red, 3);
-                llapisCercle2 = new Pen(Color.Red, 3);
-            }
-            else
-            {
-                llapisCercle1 = new Pen(Color.Blue);
-                llapisCercle2 = new Pen(Color.Green);
+                FlightPlan vuelo = vuelos.GetFlightPlan(i);
+                float x = (float)vuelo.GetCurrentPosition().GetX();
+                float y = (float)vuelo.GetCurrentPosition().GetY();
+
+                lapiz.Color = ColorVuelo(i);
+                lapiz.Width = 1;
+                graphics.DrawLine(lapiz,
+                    (float)vuelo.GetInitialPosition().GetX(), (float)vuelo.GetInitialPosition().GetY(),
+                    (float)vuelo.GetFinalPosition().GetX(), (float)vuelo.GetFinalPosition().GetY());
+
+                if (vuelos.EnConflicto(i, distanciaSeguridad))
+                {
+                    lapiz.Color = Color.Red;
+                    lapiz.Width = 3;
+                }
+                graphics.DrawEllipse(lapiz, x - r, y - r, 2 * r, 2 * r);
+
+                pincel.Color = ColorVuelo(i);
+                graphics.DrawString(vuelo.GetId(), this.Font, pincel, x + 12, y - 25);
+                i++;
             }
 
-            graphics.DrawEllipse(llapisCercle1, x1 - r, y1 - r, 2 * r, 2 * r);
-            graphics.DrawEllipse(llapisCercle2, x2 - r, y2 - r, 2 * r, 2 * r);
-
-            llapis1.Dispose();
-            llapis2.Dispose();
-            llapisCercle1.Dispose();
-            llapisCercle2.Dispose();
+            lapiz.Dispose();
+            pincel.Dispose();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace WinFormsApp4
             label2 = new Label();
             textBoxDistancia = new TextBox();
             textBoxCiclo = new TextBox();
-            button1 = new Button();
+            buttonAcceptar = new Button();
             SuspendLayout();
             //
             // label1
@@ -67,27 +67,28 @@ namespace WinFormsApp4
             textBoxCiclo.Size = new Size(100, 23);
             textBoxCiclo.TabIndex = 3;
             //
-            // button1
+            // buttonAcceptar
             //
-            button1.Location = new Point(100, 115);
-            button1.Name = "button1";
-            button1.Size = new Size(120, 35);
-            button1.TabIndex = 4;
-            button1.Text = "Acceptar";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            buttonAcceptar.Location = new Point(100, 115);
+            buttonAcceptar.Name = "buttonAcceptar";
+            buttonAcceptar.Size = new Size(120, 35);
+            buttonAcceptar.TabIndex = 4;
+            buttonAcceptar.Text = "Acceptar";
+            buttonAcceptar.UseVisualStyleBackColor = true;
+            buttonAcceptar.Click += buttonAcceptar_Click;
             //
             // Form3
             //
+            AcceptButton = buttonAcceptar;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(320, 170);
-            Controls.Add(button1);
+            Controls.Add(buttonAcceptar);
             Controls.Add(textBoxCiclo);
             Controls.Add(textBoxDistancia);
             Controls.Add(label2);
             Controls.Add(label1);
-            Name = "Form3";
+            Name = "Introducir_Parametros_Simulacion";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Dades de la simulació";
             ResumeLayout(false);
@@ -100,6 +101,6 @@ namespace WinFormsApp4
         private Label label2;
         private TextBox textBoxDistancia;
         private TextBox textBoxCiclo;
-        private Button button1;
+        private Button buttonAcceptar;
     }
 }

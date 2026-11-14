@@ -11,8 +11,13 @@
   <ItemGroup>
 	<Compile Include="FlightPlan.cs" />
 	<Compile Include="FlightPlanLib.cs" />
+	<Compile Include="GestionUsuarios.cs" />
 	<Compile Include="Position.cs" />
 	<Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
   </ItemGroup>
 
 </Project>
