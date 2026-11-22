@@ -27,7 +27,7 @@ namespace WinFormsApp4
                 estado = estado + "Distància de seguretat: " + distanciaSeguridad + "\nTemps de cicle: " + tiempoCiclo + "\n";
             else
                 estado = estado + "Distància de seguretat i temps de cicle: sense introduir\n";
-            estado = estado + "\nPassos: 1) Carregar vols   2) Dades simulació   3) Simulació";
+            estado = estado + "\nPassos: 1) Carregar o introduir vols   2) Dades simulació   3) Simulació";
             labelEstado.Text = estado;
         }
 
@@ -56,6 +56,15 @@ namespace WinFormsApp4
             MostrarEstado();
         }
 
+        // Obre la finestra per escriure plans de vol a mà. Els vols s'afegeixen a la llista actual.
+        private void menuIntroducir_Click(object sender, EventArgs e)
+        {
+            Introducir_vuelos F2 = new Introducir_vuelos();
+            F2.pon_vuelos(vuelos);
+            F2.ShowDialog();
+            MostrarEstado();
+        }
+
         // Obre la finestra de paràmetres i, si s'han acceptat, guarda la distància de seguretat i el temps de cicle.
         private void menuDades_Click(object sender, EventArgs e)
         {
@@ -75,7 +84,7 @@ namespace WinFormsApp4
         {
             if (vuelos.GetNumber() == 0)
             {
-                MessageBox.Show("Primer has de carregar un fitxer de plans de vol");
+                MessageBox.Show("Primer has de carregar o introduir plans de vol");
                 return;
             }
             if (distanciaSeguridad <= 0 || tiempoCiclo <= 0)

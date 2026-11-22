@@ -1,3 +1,0 @@
-IB101 Iberia 50 400 750 400 300
-VY202 Vueling 400 cinquanta 400 750 300
-RYR303 Ryanair 50 50 750 750 250

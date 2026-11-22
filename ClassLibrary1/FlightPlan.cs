@@ -115,28 +115,81 @@ namespace FlightLib
             return conflicto;
         }
 
-        // Simula els dos vols des de l'inici fins que arriben tots dos i retorna true si en algun
-        // moment hi ha conflicte. Rep el vol b, la distància de seguretat i el temps de cicle.
+        // Retorna true si, des de l'inici, els dos vols arribaran a estar més a prop que la distància
+        // de seguretat. Rep el vol b, la distància de seguretat i el temps de cicle (no es fa servir).
+        // La separació entre els avions és x(t) = dx + vx·t, y(t) = dy + vy·t
+        // i la distància d(t) = arrel(x(t)² + y(t)²). El de dins l'arrel és una paràbola:
+        // d²(t) = (vx² + vy²)·t² + 2·(dx·vx + dy·vy)·t + (dx² + dy²)
+        // Derivant i igualant a 0 surt el temps del mínim: t = -(dx·vx + dy·vy) / (vx² + vy²)
+        // Com que cada avió s'atura quan arriba, hi ha dos trams amb la seva paràbola:
+        // 1) volen tots dos, 2) només vola el que encara no ha arribat.
         // Deixa els dos avions a la posició inicial.
         public bool ConflictoFuturo(FlightPlan b, double distanciaSeguridad, double tiempoCiclo)
         {
             Restart();
             b.Restart();
 
-            // Pas d'una centèsima de cicle perquè no s'escapi un conflicte entre dos cicles
-            double paso = tiempoCiclo / 100;
-
-            bool conflicto = Conflicto(b, distanciaSeguridad);
-            while (!conflicto && !(HasArrived() && b.HasArrived()))
+            // Velocitat en X i Y de cada avió i temps que tarda a arribar (com a Move: velocidad / 60).
+            // Un avió que no s'ha de moure té velocitat 0 i "vola" per sempre.
+            double vxA = 0, vyA = 0, tA = double.MaxValue;
+            double hipotenusaA = initialPosition.Distancia(finalPosition);
+            if (hipotenusaA > 0 && velocidad > 0)
             {
-                Move(paso);
-                b.Move(paso);
-                if (Conflicto(b, distanciaSeguridad))
-                    conflicto = true;
+                vxA = velocidad / 60 * (finalPosition.GetX() - initialPosition.GetX()) / hipotenusaA;
+                vyA = velocidad / 60 * (finalPosition.GetY() - initialPosition.GetY()) / hipotenusaA;
+                tA = hipotenusaA / (velocidad / 60);
             }
 
-            Restart();
-            b.Restart();
+            double vxB = 0, vyB = 0, tB = double.MaxValue;
+            double hipotenusaB = b.GetInitialPosition().Distancia(b.GetFinalPosition());
+            if (hipotenusaB > 0 && b.GetVelocidad() > 0)
+            {
+                vxB = b.GetVelocidad() / 60 * (b.GetFinalPosition().GetX() - b.GetInitialPosition().GetX()) / hipotenusaB;
+                vyB = b.GetVelocidad() / 60 * (b.GetFinalPosition().GetY() - b.GetInitialPosition().GetY()) / hipotenusaB;
+                tB = hipotenusaB / (b.GetVelocidad() / 60);
+            }
+
+            double dx = b.GetInitialPosition().GetX() - initialPosition.GetX();
+            double dy = b.GetInitialPosition().GetY() - initialPosition.GetY();
+            double vx = vxB - vxA;
+            double vy = vyB - vyA;
+
+            double duracion = Math.Min(tA, tB);
+
+            bool conflicto = false;
+            for (int tramo = 1; tramo <= 2; tramo++)
+            {
+                // Mínim de la paràbola (derivada = 0)
+                double t = 0;
+                if (vx * vx + vy * vy != 0)
+                    t = -(dx * vx + dy * vy) / (vx * vx + vy * vy);
+
+                // Si cau fora del tram, el punt més proper és un extrem
+                if (t < 0)
+                    t = 0;
+                if (t > duracion)
+                    t = duracion;
+
+                double x = dx + vx * t;
+                double y = dy + vy * t;
+                if (Math.Sqrt(x * x + y * y) < distanciaSeguridad)
+                    conflicto = true;
+
+                // Tram 2: separació quan arriba el primer i només es mou l'altre
+                dx = dx + vx * duracion;
+                dy = dy + vy * duracion;
+                if (tA < tB)
+                {
+                    vx = vxB;
+                    vy = vyB;
+                }
+                else
+                {
+                    vx = -vxA;
+                    vy = -vyA;
+                }
+                duracion = Math.Abs(tA - tB);
+            }
             return conflicto;
         }
 

@@ -30,6 +30,7 @@ namespace WinFormsApp4
         {
             menuStrip1 = new MenuStrip();
             menuCargar = new ToolStripMenuItem();
+            menuIntroducir = new ToolStripMenuItem();
             menuDades = new ToolStripMenuItem();
             menuSimulacio = new ToolStripMenuItem();
             labelEstado = new Label();
@@ -39,7 +40,7 @@ namespace WinFormsApp4
             // menuStrip1
             //
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { menuCargar, menuDades, menuSimulacio });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { menuCargar, menuIntroducir, menuDades, menuSimulacio });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new Padding(7, 3, 0, 3);
@@ -53,6 +54,13 @@ namespace WinFormsApp4
             menuCargar.Size = new Size(170, 24);
             menuCargar.Text = "Carregar plans de vol";
             menuCargar.Click += menuCargar_Click;
+            //
+            // menuIntroducir
+            //
+            menuIntroducir.Name = "menuIntroducir";
+            menuIntroducir.Size = new Size(170, 24);
+            menuIntroducir.Text = "Introduir plans de vol";
+            menuIntroducir.Click += menuIntroducir_Click;
             //
             // menuDades
             //
@@ -98,6 +106,7 @@ namespace WinFormsApp4
 
         private MenuStrip menuStrip1;
         private ToolStripMenuItem menuCargar;
+        private ToolStripMenuItem menuIntroducir;
         private ToolStripMenuItem menuDades;
         private ToolStripMenuItem menuSimulacio;
         private Label labelEstado;
