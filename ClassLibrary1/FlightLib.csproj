@@ -11,6 +11,7 @@
   <ItemGroup>
 	<Compile Include="FlightPlan.cs" />
 	<Compile Include="FlightPlanLib.cs" />
+	<Compile Include="GestionCompanias.cs" />
 	<Compile Include="GestionUsuarios.cs" />
 	<Compile Include="Position.cs" />
 	<Compile Include="Properties\AssemblyInfo.cs" />

@@ -10,9 +10,11 @@ namespace FlightLib
         Position currentPosition;
         Position finalPosition;
         double velocidad;
+        double velocidadOriginal;
 
         // Crea un pla de vol a partir de l'id, la companyia, la posició inicial (ipx, ipy), la final (fpx, fpy)
-        // i la velocitat. La posició actual comença a la inicial.
+        // i la velocitat. La posició actual comença a la inicial. La velocitat es guarda també com a
+        // velocitat original per saber després si s'ha canviat.
         public FlightPlan(string id, string compania, double ipx, double ipy, double fpx, double fpy, double velocidad)
         {
             this.id = id;
@@ -21,6 +23,7 @@ namespace FlightLib
             this.currentPosition = new Position(ipx, ipy);
             this.finalPosition = new Position(fpx, fpy);
             this.velocidad = velocidad;
+            this.velocidadOriginal = velocidad;
         }
 
         public string GetId()
@@ -40,6 +43,10 @@ namespace FlightLib
 
         public double GetVelocidad()
         { return velocidad; }
+
+        // Retorna la velocitat que tenia el pla quan es va crear o carregar.
+        public double GetVelocidadOriginal()
+        { return velocidadOriginal; }
 
         public void SetId(string id)
         { this.id = id; }

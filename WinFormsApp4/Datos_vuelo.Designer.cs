@@ -30,6 +30,8 @@ namespace WinFormsApp4
         {
             labelId = new Label();
             labelCompania = new Label();
+            labelTelefon = new Label();
+            labelEmail = new Label();
             labelVelocitat = new Label();
             labelInicial = new Label();
             labelActual = new Label();
@@ -59,58 +61,76 @@ namespace WinFormsApp4
             labelCompania.TabIndex = 1;
             labelCompania.Text = "Companyia:";
             //
+            // labelTelefon
+            //
+            labelTelefon.AutoSize = true;
+            labelTelefon.Location = new Point(20, 70);
+            labelTelefon.Name = "labelTelefon";
+            labelTelefon.Size = new Size(52, 15);
+            labelTelefon.TabIndex = 2;
+            labelTelefon.Text = "Telèfon:";
+            //
+            // labelEmail
+            //
+            labelEmail.AutoSize = true;
+            labelEmail.Location = new Point(20, 95);
+            labelEmail.Name = "labelEmail";
+            labelEmail.Size = new Size(39, 15);
+            labelEmail.TabIndex = 3;
+            labelEmail.Text = "Email:";
+            //
             // labelVelocitat
             //
             labelVelocitat.AutoSize = true;
-            labelVelocitat.Location = new Point(20, 70);
+            labelVelocitat.Location = new Point(20, 120);
             labelVelocitat.Name = "labelVelocitat";
             labelVelocitat.Size = new Size(54, 15);
-            labelVelocitat.TabIndex = 2;
+            labelVelocitat.TabIndex = 4;
             labelVelocitat.Text = "Velocitat:";
             //
             // labelInicial
             //
             labelInicial.AutoSize = true;
-            labelInicial.Location = new Point(20, 95);
+            labelInicial.Location = new Point(20, 145);
             labelInicial.Name = "labelInicial";
             labelInicial.Size = new Size(82, 15);
-            labelInicial.TabIndex = 3;
+            labelInicial.TabIndex = 5;
             labelInicial.Text = "Posició inicial:";
             //
             // labelActual
             //
             labelActual.AutoSize = true;
-            labelActual.Location = new Point(20, 120);
+            labelActual.Location = new Point(20, 170);
             labelActual.Name = "labelActual";
             labelActual.Size = new Size(84, 15);
-            labelActual.TabIndex = 4;
+            labelActual.TabIndex = 6;
             labelActual.Text = "Posició actual:";
             //
             // labelFinal
             //
             labelFinal.AutoSize = true;
-            labelFinal.Location = new Point(20, 145);
+            labelFinal.Location = new Point(20, 195);
             labelFinal.Name = "labelFinal";
             labelFinal.Size = new Size(75, 15);
-            labelFinal.TabIndex = 5;
+            labelFinal.TabIndex = 7;
             labelFinal.Text = "Posició final:";
             //
             // labelArribat
             //
             labelArribat.AutoSize = true;
-            labelArribat.Location = new Point(20, 170);
+            labelArribat.Location = new Point(20, 220);
             labelArribat.Name = "labelArribat";
             labelArribat.Size = new Size(112, 15);
-            labelArribat.TabIndex = 6;
+            labelArribat.TabIndex = 8;
             labelArribat.Text = "Ha arribat al destí:";
             //
             // labelDistancias
             //
             labelDistancias.AutoSize = true;
-            labelDistancias.Location = new Point(20, 205);
+            labelDistancias.Location = new Point(20, 255);
             labelDistancias.Name = "labelDistancias";
             labelDistancias.Size = new Size(150, 15);
-            labelDistancias.TabIndex = 7;
+            labelDistancias.TabIndex = 9;
             labelDistancias.Text = "Distància als altres vols:";
             //
             // tablaDistancias
@@ -118,18 +138,18 @@ namespace WinFormsApp4
             tablaDistancias.AllowUserToAddRows = false;
             tablaDistancias.AllowUserToDeleteRows = false;
             tablaDistancias.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            tablaDistancias.Location = new Point(20, 225);
+            tablaDistancias.Location = new Point(20, 275);
             tablaDistancias.Name = "tablaDistancias";
             tablaDistancias.ReadOnly = true;
-            tablaDistancias.Size = new Size(260, 150);
-            tablaDistancias.TabIndex = 8;
+            tablaDistancias.Size = new Size(300, 150);
+            tablaDistancias.TabIndex = 10;
             //
             // buttonTancar
             //
-            buttonTancar.Location = new Point(90, 390);
+            buttonTancar.Location = new Point(110, 440);
             buttonTancar.Name = "buttonTancar";
             buttonTancar.Size = new Size(120, 35);
-            buttonTancar.TabIndex = 9;
+            buttonTancar.TabIndex = 11;
             buttonTancar.Text = "Tancar";
             buttonTancar.UseVisualStyleBackColor = true;
             buttonTancar.Click += buttonTancar_Click;
@@ -138,7 +158,7 @@ namespace WinFormsApp4
             //
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(300, 440);
+            ClientSize = new Size(340, 490);
             Controls.Add(buttonTancar);
             Controls.Add(tablaDistancias);
             Controls.Add(labelDistancias);
@@ -147,6 +167,8 @@ namespace WinFormsApp4
             Controls.Add(labelActual);
             Controls.Add(labelInicial);
             Controls.Add(labelVelocitat);
+            Controls.Add(labelEmail);
+            Controls.Add(labelTelefon);
             Controls.Add(labelCompania);
             Controls.Add(labelId);
             Name = "Datos_vuelo";
@@ -162,6 +184,8 @@ namespace WinFormsApp4
 
         private Label labelId;
         private Label labelCompania;
+        private Label labelTelefon;
+        private Label labelEmail;
         private Label labelVelocitat;
         private Label labelInicial;
         private Label labelActual;

@@ -99,5 +99,20 @@ namespace WinFormsApp4
             F4.pon_ciclo(tiempoCiclo);
             F4.ShowDialog();
         }
+
+        // Obre la Vista Avançada Realista (funcionalitat extra, tota al projecte VistaAvancada).
+        // Li passa els plans de vol carregats perquè també es puguin veure en 3D.
+        private void buttonVistaAvanzada_Click(object sender, EventArgs e)
+        {
+            VistaAvancada.Vista_avanzada F7 = new VistaAvancada.Vista_avanzada(vuelos);
+            F7.Show();
+        }
+
+        // Obre la finestra per veure, afegir i esborrar les companyies de la base de dades.
+        private void menuCompanias_Click(object sender, EventArgs e)
+        {
+            Gestion_companias F6 = new Gestion_companias();
+            F6.ShowDialog();
+        }
     }
 }

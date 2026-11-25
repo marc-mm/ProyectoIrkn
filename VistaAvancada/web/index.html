@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vista Avançada Realista</title>
+<link rel="stylesheet" href="css/estil.css">
+<script type="importmap">{"imports":{"three":"./lib/three.module.min.js","three/addons/":"./lib/addons/"}}</script>
+</head>
+<body data-modo="simulado">
+<canvas id="lienzo"></canvas>
+<div id="etiquetas"></div>
+
+<!-- Pantalla de càrrega -->
+<div id="carga">
+  <div class="orbe" aria-hidden="true"><i></i></div>
+  <p>Carregant el globus…</p>
+</div>
+
+<!-- Barra superior -->
+<header id="barra" class="vidre">
+  <div class="marca">
+    <svg class="orbe-marca" viewBox="0 0 32 32" width="34" height="34" aria-hidden="true">
+      <defs>
+        <radialGradient id="mg-mar" cx=".42" cy=".36" r=".7"><stop offset="0" stop-color="#9be6ff"/><stop offset=".55" stop-color="#2489d8"/><stop offset="1" stop-color="#0a3570"/></radialGradient>
+        <linearGradient id="mg-brill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+        <linearGradient id="mg-terra" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9cf26a"/><stop offset="1" stop-color="#2f9e2a"/></linearGradient>
+      </defs>
+      <circle cx="16" cy="16" r="13.5" fill="url(#mg-mar)" stroke="#06244d" stroke-width="1"/>
+      <path d="M9 9.5c2.2-1.6 4.6-1.4 5.6.2.8 1.3-.4 2.5.6 3.6 1 1.1 2.8.2 3.3 1.8.5 1.7-1.4 2.9-3 2.6-1.8-.3-2.2 1.7-3.6 2.1-1.6.5-3.4-1.3-3.8-3.4-.4-2.4-1.1-5.3.9-6.9zM19.5 6.8c1.8-.2 4.3 1 5.4 2.7.6 1-.6 1.4-1.6 1-1.3-.5-2.2.6-3.3.1-1.2-.6-2-3.6-.5-3.8zM21 20.5c1.2-.9 3.2-.4 3.6.8.4 1.3-1 3-2.4 3.4-1.3.4-2.1-.6-1.8-1.9.2-.9-.2-1.7.6-2.3z" fill="url(#mg-terra)" opacity=".95"/>
+      <ellipse cx="16" cy="9.4" rx="9.6" ry="6" fill="url(#mg-brill)" opacity=".75"/>
+      <circle cx="16" cy="16" r="13" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width=".8"/>
+      <path d="M1.8 21.5C7 26 21 24.8 30.6 12.2" fill="none" stroke="#e9fdff" stroke-width="1.3" stroke-linecap="round" opacity=".85"/>
+      <path d="M27.4 9.6l4 .9-2.6 3.1-.3-1.6-1.6-.6z" fill="#fff"/>
+    </svg>
+    <div><b>Vista Avançada Realista</b><small>Control de trànsit aeri · 3D</small></div>
+  </div>
+  <div class="rellotge"><div id="hora">--:--:--</div><div id="data">— UTC</div></div>
+  <div class="segment" id="modes" role="group" aria-label="Mode">
+    <button data-modo="simulado" class="on">Simulat</button>
+    <button data-modo="directo">En directe (OpenSky)</button>
+    <button data-modo="proyecto">El nostre espai aeri</button>
+  </div>
+  <div class="comptadors">
+    <div class="cnt"><b id="n-vols">0</b><span>vols en l'aire</span><small id="n-mostrats"></small></div>
+    <div class="cnt" id="cnt-conf"><b id="n-conf">0</b><span>conflictes</span></div>
+  </div>
+  <div class="eines">
+    <button class="ico" id="b-capes" title="Capes"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M10 2.5l7.5 3.8L10 10 2.5 6.3z" fill="currentColor"/><path d="M4.2 9.2L2.5 10 10 13.8l7.5-3.8-1.7-.8L10 12.1z" fill="currentColor" opacity=".85"/><path d="M4.2 12.9l-1.7.8L10 17.5l7.5-3.8-1.7-.8L10 15.8z" fill="currentColor" opacity=".7"/></svg><span>Capes</span></button>
+    <button class="ico" id="b-stats" title="Estadístiques"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><rect x="3" y="10" width="3.2" height="7" rx="1" fill="currentColor"/><rect x="8.4" y="5" width="3.2" height="12" rx="1" fill="currentColor"/><rect x="13.8" y="8" width="3.2" height="9" rx="1" fill="currentColor"/></svg><span>Estadístiques</span></button>
+    <button class="ico" id="b-so" title="So d'alarma (activat)"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 7.5h3l4.5-3.8v12.6L6 12.5H3z" fill="currentColor"/><g class="ones" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M13 7.4a3.6 3.6 0 0 1 0 5.2"/><path d="M15.2 5.2a6.8 6.8 0 0 1 0 9.6"/></g><g class="creu" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M13 7.5l5 5M18 7.5l-5 5"/></g></svg><span>So d'alarma</span></button>
+    <button class="ico" id="b-ajuda" title="Ajuda (?)">?</button>
+  </div>
+</header>
+
+<!-- Columna esquerra -->
+<aside id="col-esq">
+  <div class="cerca vidre">
+    <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13 13l5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    <input id="cerca" type="search" autocomplete="off" spellcheck="false" placeholder="Cerca vols, aeroports, monuments…  ( / )">
+    <ul id="resultats" hidden></ul>
+  </div>
+
+  <section class="panel vidre" id="p-conf">
+    <header><h3><i class="punt roig"></i>Conflictes actius <em id="conf-n">0</em></h3></header>
+    <div id="conf-llista" class="llista"></div>
+    <footer class="bots">
+      <button id="b-resoldre-tots" class="btn perill">Resoldre tots</button>
+      <button id="b-informe" class="btn">Exportar informe</button>
+    </footer>
+  </section>
+
+  <section class="panel vidre" id="p-proj" hidden>
+    <header><h3><i class="punt cian"></i>El nostre espai aeri</h3></header>
+    <p class="nota">Caixa de l'espai aeri de Barcelona amb els plans de vol del projecte. Els cercles indiquen la distància de seguretat.</p>
+    <div class="bots"><button id="b-carregar" class="btn primari">Carregar plans de vol</button></div>
+    <div class="nota" id="proj-info"></div>
+  </section>
+
+  <section class="panel vidre" id="p-stats">
+    <header><h3><i class="punt blau"></i>Estadístiques</h3><button class="ico petit" id="stats-plega" title="Plega">&minus;</button></header>
+    <div id="stats-cos">
+      <div class="graf"><h4>Companyies amb més vols</h4><canvas id="g-aer" height="120"></canvas></div>
+      <div class="graf dues">
+        <div><h4>Fases de vol</h4><canvas id="g-fase" width="110" height="110"></canvas></div>
+        <div id="g-fase-llegenda" class="llegenda"></div>
+      </div>
+      <div class="graf"><h4>Aeroports més actius</h4><canvas id="g-apt" height="110"></canvas></div>
+      <div class="graf"><h4>Vols per continent</h4><canvas id="g-cont" height="90"></canvas></div>
+      <div class="graf conf-est"><div><b id="e-act">0</b><span>conflictes actius</span></div><div><b id="e-res">0</b><span>resolts</span></div><div><b id="e-aire">0</b><span>en l'aire</span></div><div><b id="e-terra">0</b><span>a terra</span></div></div>
+    </div>
+  </section>
+</aside>
+
+<!-- Columna dreta -->
+<aside id="col-dre">
+  <section class="panel vidre" id="p-vol" hidden>
+    <header class="cap-vol">
+      <span id="v-xip" class="xip"></span>
+      <div class="titol"><h2 id="v-cs">—</h2><div id="v-aer">—</div></div>
+      <button class="ico petit" id="v-x" title="Tanca (Esc)">&times;</button>
+    </header>
+    <div class="tipus"><span id="v-tipus">—</span><span id="v-mat">—</span><span id="v-fase" class="fase">—</span></div>
+    <div class="ruta">
+      <div class="extrem"><b id="v-o">---</b><small id="v-oc">—</small></div>
+      <div class="mig">
+        <div class="barra"><i id="v-prog"></i><span id="v-av"><svg viewBox="0 0 32 32" width="24" height="24" aria-hidden="true"><path d="M30.5 16c0 1-1 1.6-2.5 1.6h-8.5l-7 10.9H10l4.5-10.9H7l-2.8 4.9H2.6L4 17v-2L2.6 10.5h1.6L7 14.4h7.5L10 3.5h2.5l7 10.9H28c1.5 0 2.5.6 2.5 1.6z"/></svg></span></div>
+        <small id="v-pct">0 %</small>
+      </div>
+      <div class="extrem dre"><b id="v-d">---</b><small id="v-dc">—</small></div>
+    </div>
+    <div class="graella">
+      <div><span>Altitud</span><b id="v-alt">—</b></div>
+      <div><span>Velocitat terra</span><b id="v-vel">—</b></div>
+      <div class="brúixola"><span>Rumb</span><b id="v-rumb">—</b>
+        <svg viewBox="0 0 40 40" width="38" height="38" aria-hidden="true"><circle cx="20" cy="20" r="17" class="cara"/><circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" opacity=".4"/><text x="20" y="9.5" text-anchor="middle" font-size="7" font-weight="700" fill="#ffd36a">N</text><g id="v-agulla"><path d="M20 7l4 15h-8z" fill="#ff9a2e"/><path d="M20 33l-3-8h6z" fill="currentColor" opacity=".55"/></g></svg>
+      </div>
+      <div><span>Vel. vertical</span><b id="v-vv">—</b></div>
+      <div><span>Sortida (UTC)</span><b id="v-sal">—</b></div>
+      <div><span>Arribada (UTC)</span><b id="v-lle">—</b></div>
+      <div><span>Distància restant</span><b id="v-dist">—</b></div>
+      <div><span>Nivell de creuer</span><b id="v-fl">—</b></div>
+    </div>
+    <div class="contacte">
+      <h4>Contacte de la companyia</h4>
+      <div id="v-contacte">—</div>
+    </div>
+    <div class="instr"><h4>Instruccions ATC</h4><ul id="v-instr"></ul></div>
+    <div class="bots">
+      <button id="b-pilotar" class="btn primari">Pilotar <kbd>P</kbd></button>
+      <button id="b-seguir" class="btn primari">Seguir <kbd>F</kbd></button>
+      <button id="b-centrar" class="btn">Centrar</button>
+      <button id="b-tancar" class="btn">Tancar</button>
+    </div>
+  </section>
+
+  <section class="panel vidre" id="p-aero" hidden>
+    <header class="cap-vol">
+      <span id="a-xip" class="xip aero">---</span>
+      <div class="titol"><h2 id="a-nom">—</h2><div id="a-ciutat">—</div></div>
+      <button class="ico petit" id="a-x" title="Tanca (Esc)">&times;</button>
+    </header>
+    <div class="graella dues">
+      <div><span>Hora local</span><b id="a-hora">—</b></div>
+      <div><span>Elevació</span><b id="a-elev">—</b></div>
+    </div>
+    <div class="pestanyes"><button class="on" data-tab="salidas">Sortides</button><button data-tab="llegadas">Arribades</button></div>
+    <div id="a-taula" class="flap"></div>
+  </section>
+</aside>
+
+<!-- Controls de temps -->
+<footer id="temps" class="vidre">
+  <span id="badge-directe">● EN DIRECTE · temps real</span>
+  <button id="t-pausa" class="t" title="Pausa / Represa (Espai)">&#10074;&#10074;</button>
+  <div class="grup" id="t-escales">
+    <button data-escala="1" class="t">x1</button><button data-escala="10" class="t">x10</button><button data-escala="60" class="t on">x60</button><button data-escala="300" class="t">x300</button><button data-escala="1000" class="t">x1000</button>
+  </div>
+  <button id="t-real" class="t ample" title="Torna a l'hora UTC real">Hora real</button>
+  <label class="dens"><span>Densitat</span><input type="range" id="t-dens" min="200" max="2500" step="50" value="400"><b id="t-dens-v">400</b></label>
+</footer>
+
+<!-- Menú de capes -->
+<div id="menu-capes" class="panel vidre" hidden>
+  <h3>Capes</h3>
+  <label><input type="checkbox" data-capa="aeropuertos" checked><i></i>Aeroports</label>
+  <label><input type="checkbox" data-capa="rutas" checked><i></i>Ruta del vol seleccionat</label>
+  <label><input type="checkbox" data-capa="rastros" checked><i></i>Rastres dels avions</label>
+  <label><input type="checkbox" data-capa="etiquetas" checked><i></i>Etiquetes (indicatius)</label>
+  <label><input type="checkbox" data-capa="conflictos" checked><i></i>Conflictes</label>
+  <label><input type="checkbox" data-capa="monuments" checked><i></i>Monuments (100 llocs emblemàtics)</label>
+  <label><input type="checkbox" data-capa="satel" checked><i></i>Imatges de satèl·lit d'alta resolució</label>
+  <label><input type="checkbox" data-capa="diaNoche" checked><i></i>Dia i nit</label>
+  <label><input type="checkbox" data-capa="atmosfera" checked><i></i>Atmosfera</label>
+</div>
+
+<!-- HUD de pilotatge (el JS treu «hidden» en entrar en mode pilot) -->
+<div id="hud-pilot" hidden>
+  <section class="hp-id vidre">
+    <div class="hp-cap">
+      <span class="hp-ala" aria-hidden="true"><svg viewBox="0 0 32 32" width="26" height="26"><path d="M30.5 16c0 1-1 1.6-2.5 1.6h-8.5l-7 10.9H10l4.5-10.9H7l-2.8 4.9H2.6L4 17v-2L2.6 10.5h1.6L7 14.4h7.5L10 3.5h2.5l7 10.9H28c1.5 0 2.5.6 2.5 1.6z" transform="rotate(-90 16 16)"/></svg></span>
+      <div><b id="hp-cs">—</b><small id="hp-tipus">—</small></div>
+    </div>
+    <div id="hp-ruta">— → —</div>
+    <ul class="hp-nav">
+      <li class="dest"><span id="hp-dest">—</span></li>
+      <li class="desv"><span id="hp-desv">—</span></li>
+    </ul>
+  </section>
+
+  <div id="hp-alerta" role="alert" hidden><i aria-hidden="true">!</i><span id="hp-alerta-text"></span></div>
+
+  <section class="hp-bots vidre">
+    <button id="hp-sortir" class="btn perill">Deixar els comandaments <kbd>Esc</kbd></button>
+    <button id="hp-vista" class="btn"><span id="hp-vista-t">Vista: persecució</span> <kbd>V</kbd></button>
+    <label class="hp-check"><input type="checkbox" id="hp-invertir"> Invertir el pitch</label>
+  </section>
+
+  <section class="hp-instr vidre" aria-label="Instruments de vol">
+    <div class="hp-pot">
+      <span class="hp-et">Potència</span>
+      <div class="hp-palanca"><i id="hp-thr-barra"></i></div>
+      <b id="hp-thr">— %</b>
+    </div>
+    <div class="hp-lect">
+      <span class="hp-et">Velocitat</span><b id="hp-vel">—</b><small>kt</small>
+    </div>
+    <div class="hp-dial gran">
+      <div id="hp-horitzo">
+        <div id="hp-horitzo-cel">
+          <svg class="hp-escala" viewBox="-150 -360 300 720" width="300" height="720" aria-hidden="true">
+            <path class="hp-linia" d="M-150 0H150"/>
+            <g class="hp-graus"><path d="M-26 160 H26" stroke-dasharray="7 4"/><text x="-36" y="160">80</text><text x="36" y="160">80</text><path d="M-11 150 H11"/><path d="M-26 140 H26" stroke-dasharray="7 4"/><text x="-36" y="140">70</text><text x="36" y="140">70</text><path d="M-11 130 H11"/><path d="M-26 120 H26" stroke-dasharray="7 4"/><text x="-36" y="120">60</text><text x="36" y="120">60</text><path d="M-11 110 H11"/><path d="M-26 100 H26" stroke-dasharray="7 4"/><text x="-36" y="100">50</text><text x="36" y="100">50</text><path d="M-11 90 H11"/><path d="M-26 80 H26" stroke-dasharray="7 4"/><text x="-36" y="80">40</text><text x="36" y="80">40</text><path d="M-11 70 H11"/><path d="M-26 60 H26" stroke-dasharray="7 4"/><text x="-36" y="60">30</text><text x="36" y="60">30</text><path d="M-11 50 H11"/><path d="M-26 40 H26" stroke-dasharray="7 4"/><text x="-36" y="40">20</text><text x="36" y="40">20</text><path d="M-11 30 H11"/><path d="M-26 20 H26" stroke-dasharray="7 4"/><text x="-36" y="20">10</text><text x="36" y="20">10</text><path d="M-11 10 H11"/><path d="M-11 -10 H11"/><path d="M-26 -20 H26"/><text x="-36" y="-20">10</text><text x="36" y="-20">10</text><path d="M-11 -30 H11"/><path d="M-26 -40 H26"/><text x="-36" y="-40">20</text><text x="36" y="-40">20</text><path d="M-11 -50 H11"/><path d="M-26 -60 H26"/><text x="-36" y="-60">30</text><text x="36" y="-60">30</text><path d="M-11 -70 H11"/><path d="M-26 -80 H26"/><text x="-36" y="-80">40</text><text x="36" y="-80">40</text><path d="M-11 -90 H11"/><path d="M-26 -100 H26"/><text x="-36" y="-100">50</text><text x="36" y="-100">50</text><path d="M-11 -110 H11"/><path d="M-26 -120 H26"/><text x="-36" y="-120">60</text><text x="36" y="-120">60</text><path d="M-11 -130 H11"/><path d="M-26 -140 H26"/><text x="-36" y="-140">70</text><text x="36" y="-140">70</text><path d="M-11 -150 H11"/><path d="M-26 -160 H26"/><text x="-36" y="-160">80</text><text x="36" y="-160">80</text></g>
+          </svg>
+        </div>
+        <!-- Escala d'alabeig i símbol de l'avió (fixos) -->
+        <svg class="hp-fix" viewBox="-100 -100 200 200" aria-hidden="true">
+          <g class="hp-alabeig">
+            <path d="M-56.6 -56.6A80 80 0 0 1 56.6 -56.6" fill="none"/>
+            <path d="M0 -80V-91" transform="rotate(-60)"/><path d="M0 -80V-91" transform="rotate(60)"/>
+            <path d="M0 -80V-91" transform="rotate(-30)"/><path d="M0 -80V-91" transform="rotate(30)"/>
+            <path d="M0 -80V-86" transform="rotate(-45)"/><path d="M0 -80V-86" transform="rotate(45)"/>
+            <path d="M0 -80V-86" transform="rotate(-20)"/><path d="M0 -80V-86" transform="rotate(20)"/>
+            <path d="M0 -80V-86" transform="rotate(-10)"/><path d="M0 -80V-86" transform="rotate(10)"/>
+            <path class="zero" d="M0 -80l-5.5 -9h11z"/>
+          </g>
+          <g class="hp-avio">
+            <path d="M-62 -2.5H-24l7 9h-4.5l-5-6H-62z"/>
+            <path d="M62 -2.5H24l-7 9h4.5l5-6H62z"/>
+            <circle r="4.2"/>
+          </g>
+        </svg>
+        <i class="hp-brill" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="hp-col">
+      <div class="hp-lect"><span class="hp-et">Altitud</span><b id="hp-alt">—</b><small>ft</small></div>
+      <div class="hp-lect petit"><span class="hp-et">Vel. vertical</span><b id="hp-vv">—</b><small>ft/min</small></div>
+    </div>
+    <div class="hp-dial">
+      <div class="hp-brix">
+        <svg id="hp-rosa" viewBox="-75 -75 150 150" aria-hidden="true">
+          <g class="hp-marques"><path class="ll" d="M0 -62 V-70" transform="rotate(0)"/><path class="cu" d="M0 -67 V-70" transform="rotate(5)"/><path d="M0 -64.5 V-70" transform="rotate(10)"/><path class="cu" d="M0 -67 V-70" transform="rotate(15)"/><path d="M0 -64.5 V-70" transform="rotate(20)"/><path class="cu" d="M0 -67 V-70" transform="rotate(25)"/><path class="ll" d="M0 -62 V-70" transform="rotate(30)"/><path class="cu" d="M0 -67 V-70" transform="rotate(35)"/><path d="M0 -64.5 V-70" transform="rotate(40)"/><path class="cu" d="M0 -67 V-70" transform="rotate(45)"/><path d="M0 -64.5 V-70" transform="rotate(50)"/><path class="cu" d="M0 -67 V-70" transform="rotate(55)"/><path class="ll" d="M0 -62 V-70" transform="rotate(60)"/><path class="cu" d="M0 -67 V-70" transform="rotate(65)"/><path d="M0 -64.5 V-70" transform="rotate(70)"/><path class="cu" d="M0 -67 V-70" transform="rotate(75)"/><path d="M0 -64.5 V-70" transform="rotate(80)"/><path class="cu" d="M0 -67 V-70" transform="rotate(85)"/><path class="ll" d="M0 -62 V-70" transform="rotate(90)"/><path class="cu" d="M0 -67 V-70" transform="rotate(95)"/><path d="M0 -64.5 V-70" transform="rotate(100)"/><path class="cu" d="M0 -67 V-70" transform="rotate(105)"/><path d="M0 -64.5 V-70" transform="rotate(110)"/><path class="cu" d="M0 -67 V-70" transform="rotate(115)"/><path class="ll" d="M0 -62 V-70" transform="rotate(120)"/><path class="cu" d="M0 -67 V-70" transform="rotate(125)"/><path d="M0 -64.5 V-70" transform="rotate(130)"/><path class="cu" d="M0 -67 V-70" transform="rotate(135)"/><path d="M0 -64.5 V-70" transform="rotate(140)"/><path class="cu" d="M0 -67 V-70" transform="rotate(145)"/><path class="ll" d="M0 -62 V-70" transform="rotate(150)"/><path class="cu" d="M0 -67 V-70" transform="rotate(155)"/><path d="M0 -64.5 V-70" transform="rotate(160)"/><path class="cu" d="M0 -67 V-70" transform="rotate(165)"/><path d="M0 -64.5 V-70" transform="rotate(170)"/><path class="cu" d="M0 -67 V-70" transform="rotate(175)"/><path class="ll" d="M0 -62 V-70" transform="rotate(180)"/><path class="cu" d="M0 -67 V-70" transform="rotate(185)"/><path d="M0 -64.5 V-70" transform="rotate(190)"/><path class="cu" d="M0 -67 V-70" transform="rotate(195)"/><path d="M0 -64.5 V-70" transform="rotate(200)"/><path class="cu" d="M0 -67 V-70" transform="rotate(205)"/><path class="ll" d="M0 -62 V-70" transform="rotate(210)"/><path class="cu" d="M0 -67 V-70" transform="rotate(215)"/><path d="M0 -64.5 V-70" transform="rotate(220)"/><path class="cu" d="M0 -67 V-70" transform="rotate(225)"/><path d="M0 -64.5 V-70" transform="rotate(230)"/><path class="cu" d="M0 -67 V-70" transform="rotate(235)"/><path class="ll" d="M0 -62 V-70" transform="rotate(240)"/><path class="cu" d="M0 -67 V-70" transform="rotate(245)"/><path d="M0 -64.5 V-70" transform="rotate(250)"/><path class="cu" d="M0 -67 V-70" transform="rotate(255)"/><path d="M0 -64.5 V-70" transform="rotate(260)"/><path class="cu" d="M0 -67 V-70" transform="rotate(265)"/><path class="ll" d="M0 -62 V-70" transform="rotate(270)"/><path class="cu" d="M0 -67 V-70" transform="rotate(275)"/><path d="M0 -64.5 V-70" transform="rotate(280)"/><path class="cu" d="M0 -67 V-70" transform="rotate(285)"/><path d="M0 -64.5 V-70" transform="rotate(290)"/><path class="cu" d="M0 -67 V-70" transform="rotate(295)"/><path class="ll" d="M0 -62 V-70" transform="rotate(300)"/><path class="cu" d="M0 -67 V-70" transform="rotate(305)"/><path d="M0 -64.5 V-70" transform="rotate(310)"/><path class="cu" d="M0 -67 V-70" transform="rotate(315)"/><path d="M0 -64.5 V-70" transform="rotate(320)"/><path class="cu" d="M0 -67 V-70" transform="rotate(325)"/><path class="ll" d="M0 -62 V-70" transform="rotate(330)"/><path class="cu" d="M0 -67 V-70" transform="rotate(335)"/><path d="M0 -64.5 V-70" transform="rotate(340)"/><path class="cu" d="M0 -67 V-70" transform="rotate(345)"/><path d="M0 -64.5 V-70" transform="rotate(350)"/><path class="cu" d="M0 -67 V-70" transform="rotate(355)"/></g>
+          <g class="hp-lletres"><text class="nord" transform="rotate(0)" y="-50">N</text><text transform="rotate(30)" y="-50">3</text><text transform="rotate(60)" y="-50">6</text><text class="card" transform="rotate(90)" y="-50">E</text><text transform="rotate(120)" y="-50">12</text><text transform="rotate(150)" y="-50">15</text><text class="card" transform="rotate(180)" y="-50">S</text><text transform="rotate(210)" y="-50">21</text><text transform="rotate(240)" y="-50">24</text><text class="card" transform="rotate(270)" y="-50">W</text><text transform="rotate(300)" y="-50">30</text><text transform="rotate(330)" y="-50">33</text></g>
+        </svg>
+        <svg class="hp-fix" viewBox="-75 -75 150 150" aria-hidden="true"><path class="hp-fidel" d="M0 -60l-6 -11h12z"/></svg>
+        <b id="hp-rumb">—</b>
+        <i class="hp-brill" aria-hidden="true"></i>
+      </div>
+      <span class="hp-et sota">Rumb</span>
+    </div>
+  </section>
+
+  <div id="hp-ajuda" class="vidre">
+    <h4>Comandaments</h4>
+    <dl>
+      <dt><kbd>W</kbd><kbd>S</kbd> o <kbd class="fl">↑</kbd><kbd class="fl">↓</kbd></dt><dd>pitch (W = morro avall)</dd>
+      <dt><kbd>A</kbd><kbd>D</kbd> o <kbd class="fl">←</kbd><kbd class="fl">→</kbd></dt><dd>alabeig</dd>
+      <dt><kbd>Q</kbd><kbd>E</kbd></dt><dd>guinyada</dd>
+      <dt><kbd>R</kbd><kbd>F</kbd> o <kbd>Re Pàg</kbd><kbd>Av Pàg</kbd></dt><dd>potència</dd>
+      <dt><kbd>V</kbd></dt><dd>vista</dd>
+      <dt><kbd>Esc</kbd></dt><dd>sortir</dd>
+    </dl>
+    <p>Sense tecles, l'avió torna sol a vol recte i anivellat · Arrossega per mirar al voltant · Roda: distància de la càmera</p>
+  </div>
+</div>
+
+<div id="tooltip" hidden></div>
+<div id="avisos"></div>
+<div id="atribucio">Imatges © Esri, Maxar, Earthstar Geographics · Textures NASA · Dades en directe: OpenSky Network</div>
+
+<!-- Ajuda -->
+<div id="ajuda" hidden>
+  <div class="panel vidre dialeg" role="dialog" aria-labelledby="ajuda-titol">
+    <h3 id="ajuda-titol">Ajuda i dreceres de teclat</h3>
+    <div class="cos">
+      <div class="taules">
+        <section>
+          <h4>Globus</h4>
+          <table>
+            <tr><td><kbd>Espai</kbd></td><td>Pausa / represa <em>(no en directe)</em></td></tr>
+            <tr><td><kbd>1</kbd>…<kbd>5</kbd></td><td>Velocitat x1, x10, x60, x300, x1000 <em>(no en directe)</em></td></tr>
+            <tr><td><kbd>F</kbd></td><td>Seguir l'avió seleccionat</td></tr>
+            <tr><td><kbd>P</kbd></td><td>Pilotar l'avió seleccionat</td></tr>
+            <tr><td><kbd>N</kbd></td><td>Orientar al nord</td></tr>
+            <tr><td><kbd>Esc</kbd></td><td>Deseleccionar / tancar</td></tr>
+            <tr><td><kbd>/</kbd></td><td>Cercar</td></tr>
+            <tr><td><kbd>?</kbd></td><td>Aquesta ajuda</td></tr>
+          </table>
+        </section>
+        <section>
+          <h4>Pilotatge</h4>
+          <table>
+            <tr><td><kbd>W</kbd><kbd>S</kbd> · <kbd class="fl">↑</kbd><kbd class="fl">↓</kbd></td><td>Pitch (W = morro avall)</td></tr>
+            <tr><td><kbd>A</kbd><kbd>D</kbd> · <kbd class="fl">←</kbd><kbd class="fl">→</kbd></td><td>Alabeig</td></tr>
+            <tr><td><kbd>Q</kbd><kbd>E</kbd></td><td>Guinyada</td></tr>
+            <tr><td><kbd>R</kbd><kbd>F</kbd> · <kbd>Re Pàg</kbd><kbd>Av Pàg</kbd></td><td>Potència</td></tr>
+            <tr><td><kbd>V</kbd></td><td>Vista: persecució / cabina</td></tr>
+            <tr><td><kbd>Esc</kbd></td><td>Deixar els comandaments</td></tr>
+          </table>
+          <p class="nota">Sense tecles, l'avió torna sol a vol recte i anivellat.</p>
+        </section>
+      </div>
+      <p class="nota">Arrossega per moure el globus · botó dret (o <kbd>Ctrl</kbd> + arrossega) per inclinar i girar la vista · roda per fer zoom · clic en un avió, aeroport o monument per seleccionar-lo</p>
+    </div>
+    <footer><button class="btn primari" id="ajuda-tanca">Entès</button></footer>
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

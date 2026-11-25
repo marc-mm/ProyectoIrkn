@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClassLibrary1\FlightLib.csproj" />
+    <ProjectReference Include="..\VistaAvancada\VistaAvancada.csproj" />
   </ItemGroup>
 
 </Project>

@@ -41,6 +41,7 @@ namespace WinFormsApp4
             matriz = new DataGridView();
             buttonAplicar = new Button();
             buttonProposar = new Button();
+            buttonInforme = new Button();
             labelAjuda = new Label();
             timer1 = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)matriz).BeginInit();
@@ -61,7 +62,7 @@ namespace WinFormsApp4
             //
             buttonMoure.Location = new Point(835, 14);
             buttonMoure.Name = "buttonMoure";
-            buttonMoure.Size = new Size(190, 45);
+            buttonMoure.Size = new Size(285, 45);
             buttonMoure.TabIndex = 1;
             buttonMoure.Text = "Moure un cicle";
             buttonMoure.UseVisualStyleBackColor = true;
@@ -69,9 +70,9 @@ namespace WinFormsApp4
             //
             // buttonDesfer
             //
-            buttonDesfer.Location = new Point(1035, 14);
+            buttonDesfer.Location = new Point(1130, 14);
             buttonDesfer.Name = "buttonDesfer";
-            buttonDesfer.Size = new Size(190, 45);
+            buttonDesfer.Size = new Size(285, 45);
             buttonDesfer.TabIndex = 2;
             buttonDesfer.Text = "Desfer últim cicle";
             buttonDesfer.UseVisualStyleBackColor = true;
@@ -81,7 +82,7 @@ namespace WinFormsApp4
             //
             buttonIniciar.Location = new Point(835, 67);
             buttonIniciar.Name = "buttonIniciar";
-            buttonIniciar.Size = new Size(190, 45);
+            buttonIniciar.Size = new Size(285, 45);
             buttonIniciar.TabIndex = 3;
             buttonIniciar.Text = "Iniciar automàtic";
             buttonIniciar.UseVisualStyleBackColor = true;
@@ -89,9 +90,9 @@ namespace WinFormsApp4
             //
             // buttonAturar
             //
-            buttonAturar.Location = new Point(1035, 67);
+            buttonAturar.Location = new Point(1130, 67);
             buttonAturar.Name = "buttonAturar";
-            buttonAturar.Size = new Size(190, 45);
+            buttonAturar.Size = new Size(285, 45);
             buttonAturar.TabIndex = 4;
             buttonAturar.Text = "Aturar";
             buttonAturar.UseVisualStyleBackColor = true;
@@ -101,7 +102,7 @@ namespace WinFormsApp4
             //
             buttonReiniciar.Location = new Point(835, 120);
             buttonReiniciar.Name = "buttonReiniciar";
-            buttonReiniciar.Size = new Size(190, 45);
+            buttonReiniciar.Size = new Size(285, 45);
             buttonReiniciar.TabIndex = 5;
             buttonReiniciar.Text = "Reiniciar";
             buttonReiniciar.UseVisualStyleBackColor = true;
@@ -109,9 +110,9 @@ namespace WinFormsApp4
             //
             // buttonGuardar
             //
-            buttonGuardar.Location = new Point(1035, 120);
+            buttonGuardar.Location = new Point(1130, 120);
             buttonGuardar.Name = "buttonGuardar";
-            buttonGuardar.Size = new Size(190, 45);
+            buttonGuardar.Size = new Size(285, 45);
             buttonGuardar.TabIndex = 6;
             buttonGuardar.Text = "Guardar vols";
             buttonGuardar.UseVisualStyleBackColor = true;
@@ -122,7 +123,7 @@ namespace WinFormsApp4
             labelConflicte.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             labelConflicte.Location = new Point(835, 180);
             labelConflicte.Name = "labelConflicte";
-            labelConflicte.Size = new Size(390, 55);
+            labelConflicte.Size = new Size(580, 55);
             labelConflicte.TabIndex = 7;
             labelConflicte.Text = "Sense conflicte";
             //
@@ -143,14 +144,14 @@ namespace WinFormsApp4
             matriz.Location = new Point(835, 265);
             matriz.Name = "matriz";
             matriz.ScrollBars = ScrollBars.Vertical;
-            matriz.Size = new Size(390, 300);
+            matriz.Size = new Size(580, 300);
             matriz.TabIndex = 9;
             //
             // buttonAplicar
             //
             buttonAplicar.Location = new Point(835, 575);
             buttonAplicar.Name = "buttonAplicar";
-            buttonAplicar.Size = new Size(390, 45);
+            buttonAplicar.Size = new Size(285, 45);
             buttonAplicar.TabIndex = 10;
             buttonAplicar.Text = "Aplicar velocitats i reiniciar";
             buttonAplicar.UseVisualStyleBackColor = true;
@@ -158,21 +159,31 @@ namespace WinFormsApp4
             //
             // buttonProposar
             //
-            buttonProposar.Location = new Point(835, 628);
+            buttonProposar.Location = new Point(1130, 575);
             buttonProposar.Name = "buttonProposar";
-            buttonProposar.Size = new Size(390, 45);
+            buttonProposar.Size = new Size(285, 45);
             buttonProposar.TabIndex = 11;
             buttonProposar.Text = "Proposar canvis de velocitat";
             buttonProposar.UseVisualStyleBackColor = true;
             buttonProposar.Click += buttonProposar_Click;
             //
+            // buttonInforme
+            //
+            buttonInforme.Location = new Point(835, 628);
+            buttonInforme.Name = "buttonInforme";
+            buttonInforme.Size = new Size(580, 45);
+            buttonInforme.TabIndex = 12;
+            buttonInforme.Text = "Guardar els canvis de velocitat per avisar les companyies";
+            buttonInforme.UseVisualStyleBackColor = true;
+            buttonInforme.Click += buttonInforme_Click;
+            //
             // labelAjuda
             //
             labelAjuda.Location = new Point(835, 690);
             labelAjuda.Name = "labelAjuda";
-            labelAjuda.Size = new Size(390, 120);
-            labelAjuda.TabIndex = 12;
-            labelAjuda.Text = "Clica un avió per veure'n les dades i la distància als altres vols.\n\nEl cercle de cada avió és la seva zona de seguretat: es torna vermell si hi ha conflicte.";
+            labelAjuda.Size = new Size(580, 120);
+            labelAjuda.TabIndex = 13;
+            labelAjuda.Text = "Clica un avió per veure'n les dades i la distància als altres vols.\n\nEl cercle de cada avió és la seva zona de seguretat: es torna vermell si hi ha conflicte.\n\nQuan hagis canviat velocitats, guarda'n el fitxer de canvis: hi surt el telèfon i l'email de cada companyia afectada.";
             //
             // timer1
             //
@@ -181,8 +192,9 @@ namespace WinFormsApp4
             // Ventana_simulacion
             //
             AutoScaleMode = AutoScaleMode.None;
-            ClientSize = new Size(1240, 830);
+            ClientSize = new Size(1430, 830);
             Controls.Add(labelAjuda);
+            Controls.Add(buttonInforme);
             Controls.Add(buttonProposar);
             Controls.Add(buttonAplicar);
             Controls.Add(matriz);
@@ -219,6 +231,7 @@ namespace WinFormsApp4
         private DataGridView matriz;
         private Button buttonAplicar;
         private Button buttonProposar;
+        private Button buttonInforme;
         private Label labelAjuda;
         private System.Windows.Forms.Timer timer1;
     }

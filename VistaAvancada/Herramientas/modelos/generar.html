@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<title>Generador de models d'avió</title>
+<!-- Eina de desenvolupament: genera web/modelos/<CODI>.glb (cal el servidor local amb -SaveDir).
+     Paràmetres: m=A320,B738 (només aquests models); desar=0 (no desa, només resum) -->
+<script type="importmap">{"imports":{"three":"/web/lib/three.module.min.js","three/addons/":"/web/lib/addons/"}}</script>
+<style>
+  body { font: 13px Consolas, monospace; background: #fff; color: #111; }
+  td { padding: 2px 8px; border-bottom: 1px solid #ddd; }
+</style>
+</head>
+<body>
+<h3>Models d'avió</h3>
+<table id="resum"></table>
+<pre id="estat">generant…</pre>
+<script type="module">
+import { generar } from './generador.js';
+import { ORDRE } from './tipus.js';
+const q = new URLSearchParams(location.search);
+const codis = q.get('m') ? q.get('m').split(',') : ORDRE;
+await generar(codis, q.get('desar') !== '0');
+</script>
+</body>
+</html>

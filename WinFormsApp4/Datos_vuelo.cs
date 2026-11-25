@@ -1,8 +1,10 @@
+using System.Data;
 using FlightLib;
 
 namespace WinFormsApp4
 {
-    // Finestra que mostra les dades d'un vol i la seva distància a la resta de vols.
+    // Finestra que mostra les dades d'un vol (també el telèfon i l'email de la companyia)
+    // i la seva distància a la resta de vols.
     public partial class Datos_vuelo : Form
     {
         FlightPlanList vuelos;
@@ -26,6 +28,7 @@ namespace WinFormsApp4
             FlightPlan vuelo = vuelos.GetFlightPlan(indice);
             labelId.Text = "Identificador: " + vuelo.GetId();
             labelCompania.Text = "Companyia: " + vuelo.GetCompania();
+            MostrarContacto(vuelo.GetCompania());
             labelVelocitat.Text = "Velocitat: " + vuelo.GetVelocidad().ToString("0.00");
             labelInicial.Text = "Posició inicial: (" + vuelo.GetInitialPosition().GetX().ToString("0.00") + " , " + vuelo.GetInitialPosition().GetY().ToString("0.00") + ")";
             labelActual.Text = "Posició actual: (" + vuelo.GetCurrentPosition().GetX().ToString("0.00") + " , " + vuelo.GetCurrentPosition().GetY().ToString("0.00") + ")";
@@ -50,6 +53,31 @@ namespace WinFormsApp4
                     tablaDistancias.Rows.Add(otro.GetId(), vuelo.Distance(otro).ToString("0.00"));
                 }
                 i++;
+            }
+        }
+
+        // Busca a la base de dades la companyia rebuda i n'escriu el telèfon i l'email a les etiquetes.
+        private void MostrarContacto(string nombreCompania)
+        {
+            GestionCompanias bd = new GestionCompanias();
+            if (bd.Iniciar() == -1)
+            {
+                labelTelefon.Text = "Telèfon: no s'ha trobat la base de dades";
+                labelEmail.Text = "Email: no s'ha trobat la base de dades";
+                return;
+            }
+            DataTable compania = bd.BuscarCompania(nombreCompania);
+            bd.Cerrar();
+
+            if (compania != null && compania.Rows.Count == 1)
+            {
+                labelTelefon.Text = "Telèfon: " + compania.Rows[0][1].ToString();
+                labelEmail.Text = "Email: " + compania.Rows[0][2].ToString();
+            }
+            else
+            {
+                labelTelefon.Text = "Telèfon: la companyia no és a la base de dades";
+                labelEmail.Text = "Email: la companyia no és a la base de dades";
             }
         }
 

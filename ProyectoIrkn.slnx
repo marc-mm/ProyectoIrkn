@@ -1,4 +1,6 @@
 <Solution>
+  <Folder Name="/ClassLibrary1/" />
   <Project Path="ClassLibrary1/FlightLib.csproj" Id="3b53fcd9-7a68-42ef-a9da-b0628f94a07e" />
+  <Project Path="VistaAvancada/VistaAvancada.csproj" />
   <Project Path="WinFormsApp4/ProyectoFormularios.csproj" />
 </Solution>

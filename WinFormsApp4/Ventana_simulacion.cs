@@ -1,9 +1,11 @@
+using System.Data;
 using FlightLib;
 
 namespace WinFormsApp4
 {
     // Finestra de simulació: mostra l'espai aeri amb tots els avions i permet moure'ls, desfer passos,
-    // canviar-ne la velocitat i guardar la simulació en un fitxer.
+    // canviar-ne la velocitat, guardar la simulació en un fitxer i guardar els canvis de velocitat
+    // per avisar les companyies.
     public partial class Ventana_simulacion : Form
     {
         FlightPlanList vuelos;
@@ -55,7 +57,7 @@ namespace WinFormsApp4
                 i++;
             }
 
-            matriz.ColumnCount = 5;
+            matriz.ColumnCount = 7;
             matriz.RowCount = vuelos.GetNumber();
             matriz.RowHeadersVisible = false;
             matriz.Columns[0].HeaderText = "Vol";
@@ -63,11 +65,17 @@ namespace WinFormsApp4
             matriz.Columns[2].HeaderText = "Velocitat";
             matriz.Columns[3].HeaderText = "X";
             matriz.Columns[4].HeaderText = "Y";
+            matriz.Columns[5].HeaderText = "Telèfon";
+            matriz.Columns[6].HeaderText = "Email";
+            matriz.Columns[6].FillWeight = 200;
             matriz.Columns[0].ReadOnly = true;
             matriz.Columns[1].ReadOnly = true;
             matriz.Columns[3].ReadOnly = true;
             matriz.Columns[4].ReadOnly = true;
+            matriz.Columns[5].ReadOnly = true;
+            matriz.Columns[6].ReadOnly = true;
             EscriureVelocitats();
+            EscriureContactes();
             timer1.Interval = 500;
 
             AvisarConflictes();
@@ -92,6 +100,35 @@ namespace WinFormsApp4
                 matriz.Rows[i].Cells[2].Value = vuelo.GetVelocidad();
                 i++;
             }
+        }
+
+        // Escriu a la taula el telèfon i l'email de la companyia de cada vol, que es busquen a la base de dades.
+        private void EscriureContactes()
+        {
+            GestionCompanias bd = new GestionCompanias();
+            if (bd.Iniciar() == -1)
+            {
+                MessageBox.Show("No s'ha trobat la base de dades: no es mostrarà el telèfon ni l'email de les companyies");
+                return;
+            }
+
+            int i = 0;
+            while (i < vuelos.GetNumber())
+            {
+                DataTable compania = bd.BuscarCompania(vuelos.GetFlightPlan(i).GetCompania());
+                if (compania != null && compania.Rows.Count == 1)
+                {
+                    matriz.Rows[i].Cells[5].Value = compania.Rows[0][1].ToString();
+                    matriz.Rows[i].Cells[6].Value = compania.Rows[0][2].ToString();
+                }
+                else
+                {
+                    matriz.Rows[i].Cells[5].Value = "no consta";
+                    matriz.Rows[i].Cells[6].Value = "no consta";
+                }
+                i++;
+            }
+            bd.Cerrar();
         }
 
         // Mostra un missatge amb les parelles de vols que tindran conflicte amb les velocitats actuals.
@@ -293,6 +330,38 @@ namespace WinFormsApp4
                 MessageBox.Show("Encara hi haurà conflicte entre:\n" + conflictos);
 
             ActualitzarPantalla();
+        }
+
+        // Guarda en un fitxer els vols als quals s'ha canviat la velocitat, amb el telèfon i l'email
+        // de cada companyia, perquè se'ls pugui avisar.
+        private void buttonInforme_Click(object sender, EventArgs e)
+        {
+            timer1.Stop();
+            if (!vuelos.HayCambiosVelocidad())
+            {
+                MessageBox.Show("Encara no s'ha canviat la velocitat de cap vol");
+                return;
+            }
+
+            SaveFileDialog dialogo = new SaveFileDialog();
+            dialogo.Filter = "Fitxers de text (*.txt)|*.txt";
+            dialogo.FileName = "canvis_velocitat.txt";
+            if (dialogo.ShowDialog() != DialogResult.OK)
+                return;
+
+            GestionCompanias bd = new GestionCompanias();
+            if (bd.Iniciar() == -1)
+            {
+                MessageBox.Show("No s'ha trobat la base de dades de companyies (usuarios.db)");
+                return;
+            }
+            int cambios = vuelos.GuardarCambiosVelocidad(dialogo.FileName, bd);
+            bd.Cerrar();
+
+            if (cambios == -1)
+                MessageBox.Show("No s'ha pogut guardar el fitxer");
+            else
+                MessageBox.Show("S'han guardat " + cambios + " canvis de velocitat amb el telèfon i l'email de cada companyia");
         }
 
         // En clicar un avió, obre una finestra amb les dades del seu vol.

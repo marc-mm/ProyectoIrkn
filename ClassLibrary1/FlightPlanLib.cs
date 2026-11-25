@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 
 namespace FlightLib
@@ -8,7 +9,8 @@ namespace FlightLib
     public class FlightPlanList
     {
         List<FlightPlan> vuelos = new List<FlightPlan>();
-        Stack<Position> historial = new Stack<Position>();
+        Stack<Position> historial = new Stack<Position>() // Afegir llistes en comptes de posiciones per poder desfer passos de la simulació amb més d'un avió a la vegada.
+        { };
 
         public void AddFlightPlan(FlightPlan p)
         {
@@ -111,6 +113,61 @@ namespace FlightLib
             }
         }
 
+        // Retorna true si a algun vol se li ha canviat la velocitat respecte a la que tenia al pla de vol.
+        public bool HayCambiosVelocidad()
+        {
+            bool hay = false;
+            int i = 0;
+            while (i < vuelos.Count && !hay)
+            {
+                if (vuelos[i].GetVelocidad() != vuelos[i].GetVelocidadOriginal())
+                    hay = true;
+                i++;
+            }
+            return hay;
+        }
+
+        // Escriu en un fitxer cada vol al qual s'ha canviat la velocitat: la velocitat anterior, la nova i
+        // el telèfon i l'email de la companyia, que es busquen a la base de dades bd (ja ha d'estar oberta).
+        // Retorna el nombre de canvis escrits o -1 si no s'ha pogut escriure el fitxer.
+        public int GuardarCambiosVelocidad(string nombreFichero, GestionCompanias bd)
+        {
+            try
+            {
+                StreamWriter escritor = new StreamWriter(nombreFichero);
+                escritor.WriteLine("CANVIS DE VELOCITAT PER EVITAR CONFLICTES");
+                escritor.WriteLine();
+
+                int cambios = 0;
+                foreach (FlightPlan vuelo in vuelos)
+                {
+                    if (vuelo.GetVelocidad() != vuelo.GetVelocidadOriginal())
+                    {
+                        string telefono = "no consta a la base de dades";
+                        string email = "no consta a la base de dades";
+                        DataTable compania = bd.BuscarCompania(vuelo.GetCompania());
+                        if (compania != null && compania.Rows.Count == 1)
+                        {
+                            telefono = compania.Rows[0][1].ToString();
+                            email = compania.Rows[0][2].ToString();
+                        }
+
+                        escritor.WriteLine("Vol: " + vuelo.GetId());
+                        escritor.WriteLine("Velocitat anterior: " + vuelo.GetVelocidadOriginal() + "   Velocitat nova: " + vuelo.GetVelocidad());
+                        escritor.WriteLine("Companyia: " + vuelo.GetCompania() + "   Telèfon: " + telefono + "   Email: " + email);
+                        escritor.WriteLine();
+                        cambios++;
+                    }
+                }
+                escritor.Close();
+                return cambios;
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+        }
+
         // Retorna true si la coordenada c està dins de l'espai aeri (entre 0 i 799).
         private bool CoordenadaCorrecta(double c)
         {
@@ -185,7 +242,7 @@ namespace FlightLib
         // o "" si no n'hi ha cap.
         public string ConflictosActuales(double distanciaSeguridad)
         {
-            string parejas = "";
+            string parejas = "";            
             int i = 0;
             while (i < vuelos.Count)
             {

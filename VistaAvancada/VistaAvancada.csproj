@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Funcionalitat extra: Vista Avançada Realista (globus 3D amb trànsit aeri mundial).
+       Tot el que és d'aquesta funcionalitat viu dins d'aquesta carpeta. -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <RootNamespace>VistaAvancada</RootNamespace>
+    <AssemblyName>VistaAvancada</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary1\FlightLib.csproj" />
+  </ItemGroup>
+
+  <!-- Dades (aeroports, aerolínies...) i pàgina 3D: es copien al costat de l'executable -->
+  <ItemGroup>
+    <None Include="Datos\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="web\**\*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4370.26" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+  <!-- Fons de la pantalla de càrrega: aurora, feixos de llum i bombolles (estil Frutiger Aero) -->
+  <defs>
+    <filter id="difus" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="38"/></filter>
+    <filter id="difus2" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="10"/></filter>
+    <linearGradient id="aur1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3dffb0" stop-opacity="0"/>
+      <stop offset=".35" stop-color="#3dffb0" stop-opacity=".55"/>
+      <stop offset=".7" stop-color="#2fd8ff" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#2f7dff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="aur2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7affd6" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#9dfff0" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#7fb6ff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="feix" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".45" stop-color="#fff" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="feixAmple" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d9fbff" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#d9fbff" stop-opacity=".16"/>
+      <stop offset="1" stop-color="#d9fbff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="bomb" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#bff4ff" stop-opacity=".02"/>
+      <stop offset=".72" stop-color="#bff4ff" stop-opacity=".08"/>
+      <stop offset=".93" stop-color="#e8fdff" stop-opacity=".42"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity=".1"/>
+    </radialGradient>
+    <radialGradient id="bombBrill" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#fff" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <symbol id="b" viewBox="-50 -50 100 100">
+      <circle r="49" fill="url(#bomb)"/>
+      <ellipse cx="-14" cy="-24" rx="18" ry="9" transform="rotate(-28 -14 -24)" fill="url(#bombBrill)" opacity=".8"/>
+      <ellipse cx="20" cy="27" rx="9" ry="4" transform="rotate(-35 20 27)" fill="#fff" opacity=".18"/>
+    </symbol>
+  </defs>
+
+  <!-- Aurora -->
+  <g filter="url(#difus)">
+    <path d="M-100 520 C 250 330, 520 640, 860 470 S 1420 300, 1720 430 L 1720 560 C 1400 460, 1180 650, 860 600 S 260 520, -100 650 Z" fill="url(#aur1)"/>
+    <path d="M-100 380 C 300 250, 640 420, 980 300 S 1500 200, 1720 260 L 1720 330 C 1460 290, 1200 420, 940 400 S 360 330, -100 470 Z" fill="url(#aur2)"/>
+  </g>
+
+  <!-- Feixos de llum -->
+  <path d="M-60 760 C 380 560, 900 820, 1660 520 L 1660 600 C 960 860, 420 640, -60 830 Z" fill="url(#feixAmple)"/>
+  <g fill="none" stroke="url(#feix)" stroke-linecap="round">
+    <path d="M-40 700 C 400 520, 920 760, 1640 470" stroke-width="2.2"/>
+    <path d="M-40 742 C 430 580, 900 800, 1640 520" stroke-width="1.2" opacity=".7"/>
+    <path d="M120 250 C 520 140, 980 300, 1500 150" stroke-width="1.4" opacity=".45"/>
+  </g>
+  <g filter="url(#difus2)" opacity=".5">
+    <path d="M-40 700 C 400 520, 920 760, 1640 470" fill="none" stroke="#bffaff" stroke-width="14"/>
+  </g>
+
+  <!-- Bombolles -->
+  <use href="#b" x="150" y="560" width="120" height="120"/>
+  <use href="#b" x="290" y="660" width="54" height="54"/>
+  <use href="#b" x="1300" y="210" width="150" height="150"/>
+  <use href="#b" x="1250" y="390" width="46" height="46"/>
+  <use href="#b" x="1440" y="640" width="84" height="84"/>
+  <use href="#b" x="420" y="150" width="64" height="64"/>
+  <use href="#b" x="980" y="720" width="38" height="38"/>
+  <use href="#b" x="220" y="320" width="28" height="28"/>
+</svg>

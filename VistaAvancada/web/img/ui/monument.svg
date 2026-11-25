@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <!-- Icona de monument (temple clàssic) per a les etiquetes del globus -->
+  <defs>
+    <linearGradient id="or" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe089"/>
+      <stop offset="1" stop-color="#c27a00"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#or)" stroke="#5a3600" stroke-width=".7" stroke-linejoin="round">
+    <path d="M8 1.2 14.6 5H1.4z"/>
+    <rect x="2.6" y="6.2" width="1.9" height="5.6"/>
+    <rect x="7.05" y="6.2" width="1.9" height="5.6"/>
+    <rect x="11.5" y="6.2" width="1.9" height="5.6"/>
+    <rect x="1.2" y="12.6" width="13.6" height="2.2" rx=".4"/>
+  </g>
+</svg>

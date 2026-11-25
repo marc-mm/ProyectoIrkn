@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Icona del botó «Pilotar»: avió vist des de dalt, enfilant-se -->
+  <g transform="rotate(-40 16 16)">
+    <path d="M30.5 16c0 1-1 1.6-2.5 1.6h-8.5l-7 10.9H10l4.5-10.9H7l-2.8 4.9H2.6L4 17v-2L2.6 10.5h1.6L7 14.4h7.5L10 3.5h2.5l7 10.9H28c1.5 0 2.5.6 2.5 1.6z"
+          fill="#fff" stroke="#0b3d12" stroke-opacity=".55" stroke-width="1.1" stroke-linejoin="round"/>
+  </g>
+</svg>

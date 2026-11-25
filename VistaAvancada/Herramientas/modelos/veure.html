@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<title>Visor de models d'avió</title>
+<!-- Eina de desenvolupament. Paràmetres:
+       m=A320            model (web/modelos/<m>.glb)
+       az=35&el=15       azimut (0 = des del morro, 90 = costat esquerre, 180 = des de darrere) i elevació, en graus
+       dist=1            multiplicador de distància
+       tot=1             els 10 models costat per costat (vista superior 3/4)
+       tint=%23d7192d    color del material "accent"
+       tren=0            amaga el node "tren"
+       fil=1             filferro (per veure la topologia) · info=0 sense text
+       t=x,y,z&d=12      punt de mira i distància absoluta (m), per a primers plans -->
+<script type="importmap">{"imports":{"three":"/web/lib/three.module.min.js","three/addons/":"/web/lib/addons/"}}</script>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #b9cfe6; font: 13px "Segoe UI", sans-serif; }
+  canvas { display: block; }
+  #info { position: fixed; left: 10px; top: 8px; color: #102030; font: 13px Consolas, monospace; white-space: pre; }
+  .etq { position: fixed; transform: translate(-50%, 0); color: #102030; font: bold 14px "Segoe UI", sans-serif; background: rgba(255,255,255,.6); padding: 1px 6px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div id="info">carregant…</div>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+const q = new URLSearchParams(location.search);
+const ORDRE = ['A320', 'A321', 'B738', 'B38M', 'B77W', 'B789', 'A359', 'A333', 'E190', 'AT76'];
+const tot = q.get('tot') === '1';
+const codis = tot ? ORDRE : [q.get('m') || 'A320'];
+const az = +(q.get('az') ?? (tot ? 18 : 35)) * Math.PI / 180, el = +(q.get('el') ?? (tot ? 42 : 15)) * Math.PI / 180;
+const dist = +(q.get('dist') ?? 1), info = document.getElementById('info');
+
+const rend = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+rend.setPixelRatio(1); rend.setSize(innerWidth, innerHeight); rend.outputColorSpace = THREE.SRGBColorSpace;
+document.body.appendChild(rend.domElement);
+const esc = new THREE.Scene(); esc.background = new THREE.Color(0xb9cfe6);
+esc.add(new THREE.HemisphereLight(0xe4eefa, 0x6a6556, 1.1));
+const sol = new THREE.DirectionalLight(0xffffff, 2.4); esc.add(sol); esc.add(sol.target);
+const cam = new THREE.PerspectiveCamera(30, innerWidth / innerHeight, 0.1, 5000);
+
+const carrega = c => new Promise((ok, ko) => new GLTFLoader().load(`/web/modelos/${c}.glb`, g => ok(g.scene), undefined, ko));
+try {
+  const models = await Promise.all(codis.map(carrega));
+  const grup = new THREE.Group(); esc.add(grup);
+  let text = '';
+  models.forEach((m, k) => {
+    if (tot) m.position.set((2 - k % 5) * 72, 0, (Math.floor(k / 5) - 0.5) * -88);
+    grup.add(m);
+    m.traverse(o => {
+      if (o.isMesh) {
+        if (q.get('tint') && o.material.name === 'accent') o.material.color.set(q.get('tint'));
+        if (q.get('fil') === '1') o.material.wireframe = true;
+      }
+    });
+    if (q.get('tren') === '0') { const t = m.getObjectByName('tren'); if (t) t.visible = false; }
+    let tris = 0, malles = 0; m.traverse(o => { if (o.isMesh) { malles++; tris += o.geometry.index.count / 3; } });
+    text += `${codis[k]}  ${tris} triangles, ${malles} malles\n`;
+  });
+  grup.updateMatrixWorld(true);
+  const caixa = new THREE.Box3().setFromObject(grup), centre = caixa.getCenter(new THREE.Vector3()), mida = caixa.getSize(new THREE.Vector3());
+  const radi = mida.length() / 2;
+  // terra
+  const terra = new THREE.Mesh(new THREE.CircleGeometry(radi * 20, 64), new THREE.MeshStandardMaterial({ color: 0x8b9477, roughness: 1 }));
+  terra.rotation.x = -Math.PI / 2; terra.position.y = caixa.min.y - 0.01; esc.add(terra);
+  // càmera
+  if (q.get('t')) centre.fromArray(q.get('t').split(',').map(Number)); // punt d'interès (primers plans)
+  const d = q.get('d') ? +q.get('d') : radi / Math.tan(cam.fov * Math.PI / 360) * (tot ? 0.62 : 0.72) * dist;
+  const dir = new THREE.Vector3(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el));
+  cam.position.copy(centre).addScaledVector(dir, d); cam.lookAt(centre);
+  cam.near = d / 50; cam.far = d * 50; cam.updateProjectionMatrix();
+  const ds = new THREE.Vector3(Math.sin(az + 0.6), 1.2, Math.cos(az + 0.6)).normalize();
+  sol.position.copy(centre).addScaledVector(ds, radi * 3); sol.target.position.copy(centre);
+  rend.render(esc, cam);
+  if (tot) models.forEach((m, k) => {
+    const p = new THREE.Vector3(m.position.x, caixa.min.y, m.position.z + 40).project(cam);
+    const e = document.createElement('div'); e.className = 'etq'; e.textContent = codis[k];
+    e.style.left = `${(p.x + 1) / 2 * innerWidth}px`; e.style.top = `${(1 - p.y) / 2 * innerHeight}px`; document.body.appendChild(e);
+  });
+  info.textContent = q.get('info') === '0' ? '' : text + `mida ${mida.x.toFixed(2)} x ${mida.y.toFixed(2)} x ${mida.z.toFixed(2)} m`;
+  const bucle = () => {
+    const w = innerWidth, h = innerHeight;
+    if (rend.domElement.width !== w || rend.domElement.height !== h) { rend.setSize(w, h); cam.aspect = w / h; cam.updateProjectionMatrix(); }
+    rend.render(esc, cam); requestAnimationFrame(bucle);
+  };
+  bucle();
+} catch (e) {
+  info.textContent = 'ERROR ' + (e.stack || e);
+  fetch('/__log', { method: 'POST', body: 'VEURE ' + (e.stack || e) }).catch(() => {});
+}
+</script>
+</body>
+</html>
